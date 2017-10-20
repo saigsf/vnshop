@@ -16,8 +16,7 @@ module.exports = {
         path: config.build.assetsRoot,
         filename: '[name].js',
         publicPath: process.env.NODE_ENV === 'production' ?
-            config.build.assetsPublicPath :
-            config.dev.assetsPublicPath
+            config.build.assetsPublicPath : config.dev.assetsPublicPath
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
@@ -46,6 +45,11 @@ module.exports = {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 include: [resolve('src'), resolve('test')]
+            },
+            {
+                test: /\.css$/,
+                loader: 'babel-loader',
+                include: [resolve('src'), resolve('test'), resolve('static')]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
