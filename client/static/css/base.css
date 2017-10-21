@@ -837,7 +837,7 @@ a:hover {
     border: 1px solid #d1434a;
     color: #d1434a;
     text-transform: uppercase;
-    letter-spacing: .25em;
+    /* letter-spacing: .25em; */
     white-space: nowrap;
     margin-top: 0!important;
 }

@@ -2,7 +2,8 @@
 <div class="register_wrap">
         <div class="bugfix_ie6 dis_none">
             <div class="n-logo-area clearfix">
-                <a href="http://mi.shudong.wang/" class="fl-l"><img src="/static/img/vn-logo.png" width="260"></a>
+                <!-- <a href="http://mi.shudong.wang/" class="fl-l"><img src="/static/img/vn-logo.png" width="260"></a> -->
+                <router-link to="/" class="fl-l"><img src="/static/img/vn-logo.png" width="260"></router-link>
             </div>
         </div>
         <div id="main">

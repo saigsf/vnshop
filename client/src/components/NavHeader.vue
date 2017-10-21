@@ -268,15 +268,17 @@
             </div>
             <!-- <div class="container-user"> -->
             <div class="topbar-cart" id="ECS_CARTINFO">
-                <a class="cart-mini " href="flow.php">
+                <router-link to="/cart" class="cart-mini ">
                     <i class="iconfont">&#xe60c;</i> 购物车
                     <span class="mini-cart-num J_cartNum" id="hd_cartnum">(0)</span>
-                </a>
+                </router-link>
             </div>
             <div class="topbar-info J_userInfo" id="ECS_MEMBERZONE">
-                <a class="link" href="user.php" rel="nofollow">登录</a>
+                <!-- <a class="link" href="user.php" rel="nofollow">登录</a> -->
+                <router-link class="link" to="/login" rel="nofollow" >登录</router-link>
                 <span class="sep">|</span>
-                <a class="link" href="user.php?act=register" rel="nofollow">注册</a>
+                <!-- <a class="link" href="user.php?act=register" rel="nofollow">注册</a> -->
+                <router-link class="link" to="/register" rel="nofollow" >注册</router-link>
             </div>
             <!-- </div> -->
         </div>
