@@ -5,8 +5,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
+import VueLazyload from 'vue-lazyload'
 
-
+Vue.use(VueLazyload, {
+    preLoad: 1.3,
+    error: 'dist/error.png',
+    loading: '../static/img/ok-2.png',
+    attempt: 1
+})
 Vue.use(VueAxios, axios)
 Vue.prototype.$https = axios
 Vue.config.productionTip = false

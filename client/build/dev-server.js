@@ -27,15 +27,15 @@ const app = express()
 const compiler = webpack(webpackConfig)
 
 // 虚拟服务
+//2017年10月23日14:51:34 注释掉虚拟服务，改为后端接口
+// var goodsList = require('../src/data/goodsList.json')
 
-var goodsList = require('../src/data/goodsList.json')
+// var router = express.Router()
 
-var router = express.Router()
-
-router.get('/goods', function(req, res, next) {
-    res.json(goodsList)
-})
-app.use(router)
+// router.get('/goods', function(req, res, next) {
+//     res.json(goodsList)
+// })
+// app.use(router)
 
 
 
