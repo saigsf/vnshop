@@ -292,6 +292,44 @@ Goods.find({"likes" : {$gt : 100}}).limit(8).skip(0)
         //···
     })
 ```
+### 路由代码详情
+```javascript
+router.get('/list', function(req, res, next) {
+
+    let sort = req.query.sort || 1;
+    let minPrice = req.query.minPrice || null;
+    let maxPrice = req.query.maxPrice || null;
+    let price = {};
+    // 筛选
+    if (minPrice && maxPrice) {
+        price = { salePrice: { $gte: minPrice, $lte: maxPrice } }
+    } else if (minPrice && !maxPrice) {
+        price = { salePrice: { $gte: minPrice } }
+    } else if ((!minPrice) && maxPrice) {
+        price = { salePrice: { $lte: maxPrice } }
+    } else {
+        price = {}
+    }
+    console.log(price)
+        // sort()排序， limit()限制查询数量
+    Goods.find(price).sort({ 'salePrice': sort }).limit(8)
+        .exec(function(err, result) {
+            if (err) {
+                res.json({
+                    status: 1,
+                    msg: err.message
+                })
+            } else {
+                res.json({
+                    status: 0,
+                    msg: "查询成功",
+                    data: result
+                })
+            }
+        })
+
+});
+```
 ###### 2017年10月23日20:57:46
 
 待续····
