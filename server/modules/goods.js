@@ -7,5 +7,6 @@ module.exports = mongoose.model("Goods", new Schema({
     productName: String,
     salePrice: Number,
     productImage: String,
-    productUrl: String
+    productUrl: String,
+    productNum: Number
 }))

@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 module.exports = mongoose.model("Users", new Schema({
     userId: String,
     userName: String,
-    userPwd: Boolean,
+    userPwd: String,
     addressList: [{
         addressId: String,
         isDefault: Boolean,
@@ -15,7 +15,10 @@ module.exports = mongoose.model("Users", new Schema({
         userName: String
     }],
     cartList: [{
-        checked: String,
+        checked: {
+            type: String,
+            default: '0'
+        },
         productId: String,
         productImage: String,
         productName: String,

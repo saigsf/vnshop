@@ -17,19 +17,11 @@
                 <div class="filter stopPop" id="filter">
                     <dl class="filter-price">
                         <dt>Price:</dt>
-                        <dd><a href="javascript:void(0)" @click="getLimitPrice()">All</a></dd>
-                        <dd>
-                            <a href="javascript:void(0)" @click="getLimitPrice({min:0,max:100})">0 - 100</a>
+                        <dd><a @click="setPriceChecked('all')" :class="{'cur':priceChecked==='all'}" href="javascript:void(0)" >All</a></dd>
+                        <dd v-for="(item,index) in priceFilter" :key="index" >
+                            <a @click="setPriceChecked(index)" :class="{'cur':priceChecked===index}"  href="javascript:void(0)">{{item.startPrice}} - {{item.endPrice}}</a>
                         </dd>
-                        <dd>
-                            <a href="javascript:void(0)" @click="getLimitPrice({min:100,max:500})">100 - 500</a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:void(0)" @click="getLimitPrice({min:500,max:1000})">500 - 1000</a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:void(0)" @click="getLimitPrice({min:1000,max:2000})" >1000 - 2000</a>
-                        </dd>
+                        
                     </dl>
                 </div>
 
@@ -44,11 +36,14 @@
                                 <div class="main">
                                     <div class="name">{{item.productName}}</div>
                                     <div class="price">{{item.salePrice}}</div>
-                                    <div class="btn-area">
-                                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                                    <div class="btn-area"  >
+                                        <a @click="addCart(item)"   href="javascript:;" class="btn btn--m">加入购物车</a>
                                     </div>
                                 </div>
                             </li>
+                            <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                            
+                            </div>
                         </ul>
                     </div>
                 </div>
@@ -71,10 +66,26 @@
             return {
                 goodsList:[],
                 isSort:true,
-                limitPrice:{
-                    min:0,
-                    max:10000
-                }
+                priceChecked:'all',
+                priceFilter:[
+                    {
+                        startPrice:0,
+                        endPrice:100
+                    },{
+                        startPrice:100,
+                        endPrice:500
+                    },{
+                        startPrice:500,
+                        endPrice:1000
+                    },{
+                        startPrice:1000,
+                        endPrice:2000
+                    }
+                ],
+                data: [],
+                busy: true,
+                page:1,
+                pageSize:4
             }
         },
         components: {
@@ -86,26 +97,59 @@
             this.getGoods(); 
         },
         methods: {
-            getGoods(){
+            getGoods(flag){
                 let sort=this.isSort?1:-1;
-                let minPrice=this.limitPrice.min;
-                let maxPrice=this.limitPrice.max;
-                let data="?sort="+sort+"&minPrice="+minPrice+"&maxPrice="+maxPrice ;
-                this.$https.get("/goods/list"+data).then(res=>{
-                    this.goodsList=res.data.data;
-                    console.log(res)
-                })
+                if(!flag){
+                    this.page=1;
+                }
+                let param={
+                    sort:sort,
+                    priceLevel:this.priceChecked,
+                    page:this.page,
+                    pageSize:this.pageSize
+                };
+                this.$https.get("/goods/list",{params:param})
+                    .then(res=>{
+                        if(flag){
+                            this.goodsList=this.goodsList.concat(res.data.data);
+                            if(res.data.data.length==0){
+                                this.busy=true;
+                            }else{
+                                this.busy=false;
+                                
+                            }
+                        }else{
+                            this.goodsList=res.data.data;
+                            this.busy=false;
+                        }
+                    })
             },
             getSort(){
                 this.isSort=!this.isSort;
                 this.getGoods();
             },
-            getLimitPrice(limit){
-                this.limitPrice=limit?limit:{
-                    min:0,
-                    max:10000
-                };
+            setPriceChecked(index){
+                this.priceChecked=index;
                 this.getGoods();
+            },
+            loadMore() {
+                this.busy = true;
+                setTimeout(()=>{
+                    this.page++;
+                    this.getGoods(true);
+                }, 1000);
+            },
+            addCart(item){
+                this.$https.post('/cart/addCart',{
+                    userId:'100000077',
+                    productId:item.productId,
+                    productNum:1
+                }).then((res)=>{
+                    
+                    if(res.data.status===0){
+                        alert("恭喜，添加购物车成功！")
+                    }
+                })
             }
 
         }
