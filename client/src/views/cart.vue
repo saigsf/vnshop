@@ -160,7 +160,7 @@ export default {
     },
     methods: {
         getCartList(){
-            this.$https.post('/cart/cartList',{userId:'100000077'})
+            this.$https.post('/users/getCartList',{userId:'100000077'})
             .then((res)=>{
                 console.log(res)
                 this.cartList=res.data.data;
@@ -184,7 +184,7 @@ export default {
             } 
         },
         deleteCart(item){
-            this.$https.post('/cart/deleteCart',{
+            this.$https.post('/users/deleteCart',{
                 userId:'100000077',
                 productId:item.productId
                 }).then((res)=>{

@@ -41,10 +41,9 @@
                                     </div>
                                 </div>
                             </li>
-                            <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
                             
-                            </div>
                         </ul>
+                        <div  v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10"></div>
                     </div>
                 </div>
             </div>
@@ -140,7 +139,7 @@
                 }, 1000);
             },
             addCart(item){
-                this.$https.post('/cart/addCart',{
+                this.$https.post('/users/addCart',{
                     userId:'100000077',
                     productId:item.productId,
                     productNum:1
@@ -155,6 +154,6 @@
         }
     }
 </script>
-<style>
+<style >
 
 </style>

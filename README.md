@@ -283,7 +283,7 @@ Goods.find({"likes" : {$gt : 100}}).limit(8)
         //···
     })
 ```
-### 跳过指定数量的数据skip()
+### 跳过指定数量的数据skip() 
 我们除了可以使用limit()方法来读取指定数量的数据外，还可以使用skip()方法来跳过指定数量的数据，skip方法同样接受一个数字参数作为跳过的记录条数。skip()方法默认参数为 0 。
 #### 使用方式
 ```
@@ -333,7 +333,119 @@ router.get('/list', function(req, res, next) {
 ###### 2017年10月23日20:57:46
 ###### 2017年10月24日09:36:36
 
-### vue-infinite-scroll 
+### vue-infinite-scroll 瀑布流加载
 [vue-infinite-scroll](https://www.npmjs.com/package/vue-infinite-scroll)
+
+#### 安装
+```
+npm install vue-infinite-scroll --save
+```
+#### CommonJS使用方式
+```
+
+You can use any build tool which supports commonjs:
+
+// register globally
+var infiniteScroll =  require('vue-infinite-scroll');
+Vue.use(infiniteScroll)
+ 
+// or for a single instance
+var infiniteScroll = require('vue-infinite-scroll');
+new Vue({
+  directives: {infiniteScroll}
+})
+```
+#### ES2015 使用方式
+```
+// register globally
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
+ 
+// or for a single instance
+import infiniteScroll from 'vue-infinite-scroll'
+new Vue({
+  directives: {infiniteScroll}
+})
+```
+
+### 在组件中使用
+在template中需要的位置插入
+```
+<div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+  ...
+</div>
+```
+在script中：
+```
+var count = 0;
+ 
+new Vue({
+  el: '#app',
+  data: {
+    data: [],
+    busy: false
+  },
+  methods: {
+    loadMore: function() {
+      this.busy = true;
+ 
+      setTimeout(() => {
+        for (var i = 0, j = 10; i < j; i++) {
+          this.data.push({ name: count++ });
+        }
+        this.busy = false;
+      }, 1000);
+    }
+  }
+});
+```
+### vue-lazyload 图片懒加载
+[vue-lazyload](https://www.npmjs.com/package/vue-lazyload)
+#### 安装
+```
+$ npm install vue-lazyload
+```
+#### 配置
+在main.js中导入
+```
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload)
+```
+#### 使用方式
+```
+<script>
+export default {
+  data () {
+    return {
+      imgObj: {
+        src: 'http://xx.com/logo.png',
+        error: 'http://xx.com/error.png',
+        loading: 'http://xx.com/loading-spin.svg'
+      },
+      imgUrl: 'http://xx.com/logo.png' // String
+    }
+  }
+}
+</script> 
+ 
+<template>
+  <div ref="container">
+     <img v-lazy="imgUrl"/>
+     <div v-lazy:background-image="imgUrl"></div>
+ 
+     <!-- with customer error and loading -->
+     <img v-lazy="imgObj"/>
+     <div v-lazy:background-image="imgObj"></div>
+ 
+     <!-- Customer scrollable element -->
+     <img v-lazy.container ="imgUrl"/>
+     <div v-lazy:background-image.container="img"></div>
+ 
+    <!-- srcset -->
+    <img v-lazy="'img.400px.jpg'" data-srcset="img.400px.jpg 400w, img.800px.jpg 800w, img.1200px.jpg 1200w">
+    <img v-lazy="imgUrl" :data-srcset="imgUrl' + '?size=400 400w, ' + imgUrl + ' ?size=800 800w, ' + imgUrl +'/1200.jpg 1200w'" />
+  </div>
+</template>
+```
 
 待续····

@@ -26,7 +26,7 @@
                                     <div class="dropdown">
                                         <label class="iconfont"></label>
                                         <select name="province" id="selProvinces_0" onchange="region.changed(this, 2, 'selCities_0')" class="input-select">
-                        <option value="0">请选择省</option>
+                                                <option value="0">请选择省</option>
                                                 <option value="2" >北京</option>
                                                 <option value="3" >安徽</option>
                                                 <option value="4" >福建</option>
@@ -136,7 +136,7 @@
 
 
                         <div class="form-confirm clearfix">
-                            <input type="submit" name="Submit" class="btn btn-primary" value="配送至这个地址" />
+                            <input type="button" name="Submit" class="btn btn-primary" @click="add"  value="配送至这个地址" />
                             <input type="hidden" name="step" value="consignee" />
                             <input type="hidden" name="act" value="checkout" />
                             <input name="address_id" type="hidden" value="" />
@@ -161,16 +161,33 @@ import '../../static/css/styAll.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
 export default {
-  name: 'address',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    name: 'address',
+    components: {
+        NavHeader,
+        NavFooter
+    },
+    data () {
+        return {
+            address :{
+                addressId: 1,
+                isDefault: false,
+                postCode: '710000',
+                streetName: '陕西省西安市碑林区长安北路111号1401室',
+                tel: '18659131413',
+                userName: '高世飞'
+            }
+        }
+    },
+    methods: {
+        add(){
+            this.$https.post('/users/addAddr',{
+                userId:'100000077',
+                address:this.address
+            }).then(res=>{
+                console(res)
+            })
+        }
     }
-  },
-  components: {
-      NavHeader,
-      NavFooter
-  }
 }
 </script>
 

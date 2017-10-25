@@ -1,14 +1,14 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import axios from 'axios'
+import Axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueResource from 'vue-resource'
 import App from './App'
 import router from './router'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
-
+import apiConfig from '../config/api.config'
 
 
 Vue.use(infiniteScroll)
@@ -18,13 +18,16 @@ Vue.use(VueLazyload, {
     loading: '../static/img/ok-2.png',
     attempt: 1
 })
-Vue.use(VueAxios, axios)
-Vue.prototype.$https = axios
+Vue.use(VueAxios, Axios)
+
+Axios.defaults.baseURL = apiConfig.baseURl
+
+Vue.prototype.$https = Axios
 Vue.config.productionTip = false
 
 
 // import '../static/css/index.css'
-
+import '../static/css/font-awesome.min.css'
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

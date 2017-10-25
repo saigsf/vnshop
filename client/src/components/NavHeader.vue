@@ -1,5 +1,6 @@
 <template>
-<div class="site-header" style="clear:both;">
+    <div>
+    <div class="site-header" style="clear:both;">
         <div class="container">
             <div class="header-logo">
                 <a href="index.php" title="格美官网"><img src="/static/img/vn-logo.png" /></a>
@@ -274,30 +275,111 @@
                 </router-link>
             </div>
             <div class="topbar-info J_userInfo" id="ECS_MEMBERZONE">
-                <!-- <a class="link" href="user.php" rel="nofollow">登录</a> -->
-                <router-link class="link" to="/login" rel="nofollow" >登录</router-link>
-                <span class="sep">|</span>
-                <!-- <a class="link" href="user.php?act=register" rel="nofollow">注册</a> -->
-                <router-link class="link" to="/register" rel="nofollow" >注册</router-link>
+                
+                <a class="link" rel="nofollow" v-if="!topName" @click="isLogin=true" >登录</a>
+                <a class="link" rel="nofollow" v-else >
+                    <i class="fa fa-user"></i>
+                    {{topName}}
+                </a>
+                <!-- <router-link class="link" to="/login" rel="nofollow" >登录</router-link> -->
+                <span class="sep"   >|</span>
+                <a class="link" v-if="topName" @click="logOut" rel="nofollow">退出</a>
+                <router-link class="link" to="/registerLogin"  v-if="!topName" rel="nofollow" >注册</router-link>
             </div>
             <!-- </div> -->
         </div>
         <div id="J_navMenu" class="header-nav-menu" style="display: none;">
             <div class="container"></div>
         </div>
+
+
+        
+
     </div>
+    <!-- 登录框 -->
+      <div class="md-modal modal-msg md-modal-transition " :class="{'md-show':isLogin}" >
+        <div class="md-modal-inner">
+          <div class="md-top">
+            <div class="md-title">login in</div>
+            <button class="md-close" @click="isLogin=false" >Close</button>
+          </div>
+          <div class="md-content">
+            <div class="confirm-tips">
+              <div class="error-wrap">
+                <span class="error error-show" >用户名或密码错误</span>
+              </div>
+              <ul>
+                <li class="regi_form_input">
+                  <input type="text" tabindex="1" name="loginname" v-model="userName" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
+                </li>
+                <li class="regi_form_input noMargin">
+                  <i class="icon IconPwd"></i>
+                  <input type="password" tabindex="2" name="password" v-model="userPwd" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text" @keyup.enter="login">
+                </li>
+              </ul>
+
+            </div>
+            <div class="login-wrap">
+              <a href="javascript:;" class="btn-login" @click="login" >登录</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="md-overlay" v-if="isLogin" @click="isLogin=false">
+      </div>
+    </div>
+
 
 
 </template>
 
 <script>
+import '../../static/css/base.css'
+import { delCookie, getCookie } from '@/util/util'
 export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    name: 'HelloWorld',
+    data () {
+        return {
+            userName:'',
+            userPwd:'',
+            isLogin:false,
+            topName:''
+        }
+    },
+    created(){
+        // this.searchCookie();
+        this.checkLogin()
+    },
+    methods:{
+        login(){
+            this.$https.post('/users/login',{
+                userName:this.userName,
+                userPwd:this.userPwd
+            }).then(res=>{
+                this.isLogin=false;
+                this.topName=res.data.data.userName
+                
+            })
+        },
+        searchCookie(){
+            if(getCookie('userName')){
+                this.topName=getCookie('userName')
+            }
+        },
+        checkLogin(){
+            this.$https.post('/users/checkLogin').then(res=>{
+                
+                this.topName=res.data.data
+                
+            })
+        },
+        logOut(){
+            this.$https.post('/users/delLogin').then(res=>{
+                this.topName=''
+                
+            })
+        }
     }
-  }
 }
 </script>
 

@@ -7,8 +7,11 @@ module.exports = mongoose.model("Users", new Schema({
     userName: String,
     userPwd: String,
     addressList: [{
-        addressId: String,
-        isDefault: Boolean,
+        addressId: Number,
+        isDefault: {
+            type: Boolean,
+            default: false
+        },
         postCode: String,
         streetName: String,
         tel: String,

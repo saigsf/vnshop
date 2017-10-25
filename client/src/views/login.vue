@@ -62,8 +62,19 @@ export default {
   name: 'Login',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      userName:'',
+      userPwd:''
     }
+  },
+  methods:{
+      login(){
+          this.$https.post('/users/login',{
+              userName:this.userName,
+              userPwd:this.userPwd
+          }).then(res=>{
+              console.log(res)
+          })
+      }
   }
 }
 </script>
