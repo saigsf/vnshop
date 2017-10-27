@@ -166,7 +166,6 @@ export default {
     data () {
         return {
             address :{
-                addressId: 1,
                 isDefault: false,
                 postCode: '710000',
                 streetName: '陕西省西安市碑林区长安北路111号1401室',
@@ -175,7 +174,7 @@ export default {
                 userName: '高世飞',
                 Email:'123@wqe.com',
                 sign_building:'华夏银行',
-                best_time:Date.now,
+                best_time:'',
                 country:'',
                 province:'',
                 city:'',

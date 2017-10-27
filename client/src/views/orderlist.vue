@@ -1,9 +1,23 @@
 <template>
 <div>
     <nav-header></nav-header>
+    <nav-crumbs>orderInfo</nav-crumbs>
     <div class="page-main">
         <div class="container clearfix">
+            
             <div class="checkout-box confirm-order-box">
+                <div class="page-title-normal">
+                    <h2 class="page-title-h2"><span>check out</span></h2>
+                </div>
+            <!-- 进度条 -->
+                <div class="check-step " >
+                    <ul>
+                        <li class="cur"><span>Confirm</span> address</li>
+                        <li class="cur"><span>View your</span> order</li>
+                        <li><span>Make</span> payment</li>
+                        <li><span>Order</span> confirmation</li>
+                    </ul>
+                </div>
                 <h2>确认订单信息页面</h2>
                 <div class="flowBox_in">
                     <form action="flow.php" method="post" name="theForm" id="theForm" onsubmit="return checkOrderForm(this)">
@@ -52,7 +66,7 @@
                                 </div>
                             </li>
 
-                            <li class="section-options clearfix section-goods">
+                            <!-- <li class="section-options clearfix section-goods">
                                 <div class="section-header clearfix">
                                     <h3 class="title">商品列表</h3>
                                     <router-link to="/cart" class="modify">返回购物车<i class="iconfont"></i></router-link>
@@ -73,16 +87,64 @@
                                     </tr>
                                     <tr>
                                         <td bgcolor="#ffffff" colspan="7">
-                                            <!-- <span  >您还没有加入商品</span> -->
+                                            <span  >您还没有加入商品</span>
                                             <span>购物金额小计 2547.00<em>元</em>，比市场价 3034.80<em>元</em> 节省了 487.80<em>元</em> (16%)</span>
                                             
                                         </td>
                                     </tr>
                                 </table>
+                            </li> -->
+                            <li class="section-options clearfix section-goods">
+                                <!-- order list -->
+                                <div class="page-title-normal section-header checkout-title">
+                                    <h2 class="title"><span>商品列表</span></h2>
+                                    <router-link to="/cart" class="modify ">返回购物车<i class="iconfont"></i></router-link>
+                                </div>
+                                <div class="item-list-wrap confirm-item-list-wrap">
+                                    <div class="cart-item order-item">
+                                    <div class="cart-item-head">
+                                        <ul>
+                                        <li>商品信息</li>
+                                        <li>单价</li>
+                                        <li>数量</li>
+                                        <li>小计</li>
+                                        </ul>
+                                    </div>
+                                    <ul class="cart-item-list">
+                                        <li  v-for="(item,idx) in goodsList" :key="idx" v-if="item.checked==='1'" >
+                                        <div class="cart-tab-1">
+                                            <div class="cart-item-pic">
+                                                <img :src="'/static/img/'+item.productImage" :title="item.productName"  />
+                                            </div>
+                                            <div class="cart-item-title">
+                                                <div class="item-name">{{item.productName}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="cart-tab-2">
+                                            <div class="item-price">{{item.salePrice}}</div>
+                                        </div>
+                                        <div class="cart-tab-3">
+                                            <div class="item-quantity">
+                                                <div class="select-self">
+                                                    <div class="select-self-area">
+                                                        <span class="select-ipt">×{{item.productNum}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="item-stock item-stock-no">In Stock</div>
+                                            </div>
+                                        </div>
+                                        <div class="cart-tab-4">
+                                            <div class="item-price-total">${{item.salePrice*item.productNum}}</div>
+                                        </div>
+                                        </li>
+                                    </ul>
+                                    </div>
+                                </div>
+
                             </li>
 
 
-                            <li class="section-options clearfix section-goods">
+                            <!-- <li class="section-options clearfix section-goods">
                                 <h3 class="section-header"><span>祝福贺卡</span></h3>
                                 <table width="100%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="cardTable" class="goods-list-table">
                                     <tr >
@@ -116,7 +178,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                            </li>
+                            </li> -->
 
                             <li class="section-options clearfix">
                                 <h3 class="section-header">其它信息</h3>
@@ -212,7 +274,7 @@
                             <li class="section-options clearfix" style="border-bottom:none;">
                                 <div style="margin:8px auto; text-align:right;">
                                     <!-- <router-link to="/orderDone" > -->
-                                        <input class="btn btn--orange" type="button" value="提交订单" @click="orderDone" />
+                                        <input class="btn btn--m btn--red" type="button" value="提交订单并支付" @click="orderDone" />
                                     <!-- </router-link> -->
                                     <!-- <input type="hidden" name="step" value="done" /> -->
                                 </div>
@@ -224,6 +286,22 @@
         </div>
     </div>
     <nav-footer></nav-footer>
+    <modal :mdShow="payTypeConfirm">
+        <div slot="message" class="confirm-tips" >亲！您没有选择支付方式</div>
+        <button slot="close" class="md-close" @click="payTypeConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="取消" @click="payTypeConfirm=false" >
+            <input class="btn btn-gray" type="button" value="确定" @click="payTypeConfirm=false">
+        </a>
+    </modal>
+    <modal :mdShow="shopMethodConfirm">
+        <div slot="message" class="confirm-tips" >亲！您没有选择配送方式</div>
+        <button slot="close" class="md-close" @click="shopMethodConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="取消" @click="shopMethodConfirm=false" >
+            <input class="btn btn-gray" type="button" value="确定" @click="shopMethodConfirm=false">
+        </a>
+    </modal>
 </div>
 </template>
 
@@ -231,11 +309,15 @@
 import '../../static/css/styAll.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
+import NavCrumbs from '../components/NavCrumbs'
+import Modal from '../components/Modal'
 export default {
     name: 'orderList',
     components: {
         NavHeader,
-        NavFooter
+        NavFooter,
+        NavCrumbs,
+        Modal
     },
     created () {
         this.getCheckedGoods();
@@ -293,7 +375,9 @@ export default {
                 }
             ],
             payType:'',
-            shopMethod:''
+            payTypeConfirm:false,
+            shopMethod:'',
+            shopMethodConfirm:false
         }
     },
     methods:{
@@ -308,24 +392,27 @@ export default {
                 })
         },
         getAddrList(){
+            let addressId =this.$router.history.current.query.addressId
+            
             this.$https.get('/users/getAddr',{
                 params:{
-                    userId:'100000077'
+                    userId:'100000077',
+                    addressId:addressId
                 }
             }).then(result=>{
-                var res=result.data.data;
-                
-                res.forEach((item)=> {
-                    if(item.isDefault){
-                        this.address=item
-                    }
-                });
-                
-                
+                let res=result.data.data;
+                if(!addressId){
+                    res.forEach((item)=> {
+                        if(item.isDefault){
+                            this.address=item
+                        }
+                    });
+                }else{
+                    this.address=res;
+                }
             })
         },
         getTotal(){
-            console.log(this.goodsList)
             this.goodsList.forEach((item)=>{
                 if(item.checked=='1'){
                     this.totalPrice+=item.salePrice*item.productNum
@@ -347,18 +434,25 @@ export default {
         },
         orderDone(){
 
-            this.getType()
-            this.$https.post('/users/addOrder',{
+            if(this.getType()){
+                this.payTypeConfirm=true;
+            }else if(this.getMethod()) {
+                this.shopMethodConfirm=true;
+            }else{
+                this.$https.post('/users/addOrder',{
                     userId:'100000077',
                     addressId :this.address.addressId,
                     orderTotal :this.totalPrice,
                     payType :this.payType,
                     shopMethod : this.shopMethod,
                 }).then((res)=>{
-                    console.log(res)
-                    this.$router.push({path:'/orderDone'})
+                    // console.log(res)
+                    if(res.data.code==0)
+                    this.$router.push({path:'/orderDone',query:{orderId:res.data.data.orderId}})
 
                 })
+            }
+            
         },
         getType(){
             this.paymentType.forEach(function(item){
@@ -366,11 +460,24 @@ export default {
                     this.payType=item.title
                 }
             },this);
+            if(this.payType){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        getMethod(){
             this.shopMethods.forEach(function(item){
                 if(item.checked){
                     this.shopMethod=item.title
                 }
-            },this)
+            },this);
+            if(this.shopMethod){
+                return false;
+                // 
+            }else{
+                return true;
+            }
         }
 
     }
@@ -379,5 +486,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.check-step{
+    margin: 0 30px 0 30px
+}
 </style>

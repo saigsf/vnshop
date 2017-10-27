@@ -543,6 +543,7 @@ a:hover {
 /** 面包屑 **/
 
 .nav-breadcrumb {
+    text-align: center;
     padding: 10px 0;
     line-height: 25px;
     font-size: 14px;

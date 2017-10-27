@@ -3,11 +3,12 @@ var Schema = mongoose.Schema;
 
 // 使用 module.exports 导出 模块
 module.exports = mongoose.model("Users", new Schema({
-    userId: String,
-    userName: String,
+    userId: { type: String, unique: true },
+    userName: { type: String, unique: true },
     userPwd: String,
+    Email: String,
     addressList: [{
-        addressId: String,
+        addressId: { type: String, unique: true },
         isDefault: {
             type: Boolean,
             default: false
@@ -41,7 +42,7 @@ module.exports = mongoose.model("Users", new Schema({
     }],
     orderList: [{
         addressInfo: {
-            addressId: String,
+            addressId: { type: String, unique: true },
             isDefault: Boolean,
             postCode: String,
             streetName: String,
@@ -60,7 +61,7 @@ module.exports = mongoose.model("Users", new Schema({
             productNum: Number,
             salePrice: Number
         }],
-        orderId: String,
+        orderId: { type: String, unique: true },
         orderStatus: String,
         orderTotal: Number,
         payType: String,

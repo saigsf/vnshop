@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav-header></nav-header>
-        <!-- <nav-crumbs></nav-crumbs> -->
+        <nav-crumbs>购物车</nav-crumbs>
         <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <symbol id="icon-add" viewBox="0 0 32 32">
@@ -165,6 +165,7 @@ export default {
     components:{
         NavHeader,
         NavFooter,
+        NavCrumbs,
         Modal
     },
     data () {
@@ -282,7 +283,9 @@ export default {
         },
         toOrder(){
             if(this.totalPrice>0){
-                this.$router.push({path:'/orderList'})
+                this.$router.push({path:'/address'})
+            }else{
+                this.numConfirm=true
             }
         }
     }

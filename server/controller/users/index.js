@@ -34,10 +34,10 @@ router.put('/updataAddr', controller.updataAddr);
 router.get('/delAddr', controller.delAddr);
 router.get('/setDefault', controller.setDefaultAddr)
 
-// 
+// 订单操作
 router.post('/addOrder', controller.addOrder)
 router.get('/getOrderInfo', controller.getOrderInfo)
-
+router.post('/updateOrder', controller.updateOrder)
 
 
 

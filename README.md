@@ -448,4 +448,62 @@ export default {
 </template>
 ```
 
+### 父组件调用子组件方法$refs 2017年10月27日11:23:37
+```
+<template>
+    <div id="app">
+        <input type="button" name="" id="" @click="parentCall" value="父调子" />
+        <hello ref="chil" />//hello组件
+    </div>
+</template>
+
+<script>
+    import hello from './components/Hello'
+    export default {
+        name: 'app',
+        'components': {
+            hello
+        },
+        methods: {
+　　        parentCall () {
+　　　　        this.$refs.chil.chilFn('我是父元素传过来的')
+　　        }
+        }
+    }
+</script>
+
+/*Hello.vue  :*/
+
+<template>
+    <div class="hello"></div>
+</template>
+
+<script>
+    export default {
+        name: 'hello',
+        'methods': {
+　　       chilFn (msg) {
+　　　　     alert(msg)
+　　      }
+        }
+    }
+</script>
+```
+
+#### 错误Can't set headers after they are sent. 重复调用res.json({})
+```
+Error: Can't set headers after they are sent.
+    at ServerResponse.OutgoingMessage.setHeader (_http_outgoing.js:356:11)
+    at ServerResponse.header (D:\phpStudy\WWW\myproject\vnshop\server\node_modul                         es\_express@4.15.5@express\lib\response.js:730:10)
+    at ServerResponse.json (D:\phpStudy\WWW\myproject\vnshop\server\node_modules                         \_express@4.15.5@express\lib\response.js:253:10)
+    at D:\phpStudy\WWW\myproject\vnshop\server\controller\users\users.controller                         .js:691:36
+    at Array.forEach (native)
+    at D:\phpStudy\WWW\myproject\vnshop\server\controller\users\users.controller                         .js:689:34
+    at Query.<anonymous> (D:\phpStudy\WWW\myproject\vnshop\server\node_modules\_                         mongoose@4.12.4@mongoose\lib\model.js:3932:16)
+    at D:\phpStudy\WWW\myproject\vnshop\server\node_modules\_kareem@1.5.0@kareem                         \index.js:273:21
+    at D:\phpStudy\WWW\myproject\vnshop\server\node_modules\_kareem@1.5.0@kareem                         \index.js:131:16
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+
+```
+[解决方法](http://blog.csdn.net/qq_29380855/article/details/50692528)
 待续····

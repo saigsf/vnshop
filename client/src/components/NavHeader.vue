@@ -271,10 +271,10 @@
             </div>
             <!-- <div class="container-user"> -->
             <div class="topbar-cart" id="ECS_CARTINFO">
-                <router-link to="/cart" class="cart-mini ">
+                <a @click="toCart" class="cart-mini ">
                     <i class="iconfont">&#xe60c;</i> 购物车
-                    <span class="mini-cart-num J_cartNum" id="hd_cartnum">(0)</span>
-                </router-link>
+                    <span class="mini-cart-num J_cartNum" id="hd_cartnum">({{cartNum}})</span>
+                </a>
             </div>
             <div class="topbar-info J_userInfo" id="ECS_MEMBERZONE">
                 
@@ -286,7 +286,7 @@
                 <!-- <router-link class="link" to="/login" rel="nofollow" >登录</router-link> -->
                 <span class="sep"   >|</span>
                 <a class="link"  v-if="topName" @click="logOut" rel="nofollow">退出</a>
-                <router-link class="link" to="/registerLogin"  v-if="!topName" rel="nofollow" >注册</router-link>
+                <router-link class="link" to="/register"  v-if="!topName" rel="nofollow" >注册</router-link>
             </div>
             <!-- </div> -->
         </div>
@@ -299,36 +299,34 @@
 
     </div>
     <!-- 登录框 -->
-      <div class="md-modal modal-msg md-modal-transition " :class="{'md-show':isLogin}" >
-        <div class="md-modal-inner">
-          <div class="md-top">
-            <div class="md-title">login in</div>
-            <button class="md-close" @click="isLogin=false" >Close</button>
-          </div>
-          <div class="md-content">
-            <div class="confirm-tips">
-              <div class="error-wrap">
-                <span class="error error-show" >用户名或密码错误</span>
-              </div>
-              <ul>
-                <li class="regi_form_input">
-                  <input type="text" tabindex="1"  name="loginname" v-model="userName" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
-                </li>
-                <li class="regi_form_input noMargin">
-                  <i class="icon IconPwd"></i>
-                  <input type="password" tabindex="2" name="password" v-model="userPwd" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text" @keyup.enter="login">
-                </li>
-              </ul>
-
+        <modal :mdShow="isLogin" >
+            <div slot="message" class="md-tit" >
+            <h2>登录</h2> 
             </div>
-            <div class="login-wrap">
-              <a href="javascript:;" class="btn-login" @click="login" >登录</a>
+            <button slot="close" class="md-close" @click="isLogin=false" >Close</button>
+            <div slot="btnGroup" class="regbox confirm-tips">
+                <ul>
+                    <li class="law">
+                        <input type="text" tabindex="1"   v-model="userName" placeholder="User Name"  class="btn-block">
+                    </li>
+                    <li class="law">
+                        <i class="icon IconPwd"></i>
+                        <input type="password" tabindex="2"  v-model="userPwd" placeholder="Password" class="btn-block">
+                    </li>
+                </ul>
+                <div class="law">
+                    <a href="javascript:;" class="btn btn-primary btn-block" @click="login" >登录</a>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="md-overlay" v-if="isLogin" @click="isLogin=false">
-      </div>
+        </modal>
+        <modal :mdShow="toCartConfirm" >
+            <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
+            <button slot="close" class="md-close" @click="toCartConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="toCartConfirm=false" >
+                <input class="btn btn-gray" type="button" value="确定" @click="toLogin">
+            </a>
+        </modal>
     </div>
 
 
@@ -337,15 +335,22 @@
 
 <script>
 import '../../static/css/base.css'
+import Modal from '../components/Modal'
 import { delCookie, getCookie } from '@/util/util'
 export default {
     name: 'HelloWorld',
+    props: ['isNowLogin'],
+    components:{
+        Modal
+    },
     data () {
         return {
             userName:'',
             userPwd:'',
             isLogin:false,
-            topName:''
+            topName:'',
+            toCartConfirm:false,
+            cartNum:0
         }
     },
     created(){
@@ -359,9 +364,12 @@ export default {
                 userName:this.userName,
                 userPwd:this.userPwd
             }).then(res=>{
+                console.log(res)
                 this.isLogin=false;
                 this.topName=res.data.data.userName
-                
+                this.$https.post('/users/getCartList').then(res=>{
+                        this.cartNum=res.data.data.length
+                    })
             })
         },
         searchCookie(){
@@ -371,9 +379,14 @@ export default {
         },
         checkLogin(){
             this.$https.post('/users/checkLogin').then(res=>{
-                
-                this.topName=res.data.data
-                
+                if(res.data.code===0){
+                    this.topName=res.data.data
+                    this.$https.post('/users/getCartList').then(res=>{
+                        this.cartNum=res.data.data.length
+                    })
+                }else{
+                    // this.isLogin=true
+                }
             })
         },
         logOut(){
@@ -381,6 +394,19 @@ export default {
                 this.topName=''
                 this.$router.push({path:'/'})
             })
+        },
+        toCart(){
+            this.$https.post('/users/checkLogin').then(res=>{
+                if(res.data.code===0){
+                    this.$router.push({path:'/cart'})
+                }else{
+                    this.toCartConfirm=true
+                }
+            })
+        },
+        toLogin(){
+            this.toCartConfirm=false;
+            this.isLogin=true;
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav-header/>
+    <nav-header :isNowLogin="isNowLogin" ref="child" />
     <nav-crumbs>
         <span>goods</span>
     </nav-crumbs>
@@ -51,21 +51,21 @@
     </div>
     <nav-footer/>
     <modal :mdShow="isAddConfirm" >
-            <div slot="message" class="confirm-tips" >您已经将商品加入购物车，是要继续购物呢，还是要查看购物车</div>
-            <button slot="close" class="md-close" @click="isAddConfirm=false" >Close</button>
-            <a  slot="btnGroup" class="btn-wrap" >
-                <input class="btn btn-gray" type="button" value="继续购物" @click="isAddConfirm=false" >
-                <input class="btn btn-gray" type="button" value="查看购物车" @click="toCart">
-            </a>
-        </modal>
+        <div slot="message" class="confirm-tips" >您已经将商品加入购物车，是要继续购物呢，还是要查看购物车</div>
+        <button slot="close" class="md-close" @click="isAddConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="继续购物" @click="isAddConfirm=false" >
+            <input class="btn btn-gray" type="button" value="查看购物车" @click="toCart">
+        </a>
+    </modal>
     <modal :mdShow="isLoginConfirm" >
-            <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
-            <button slot="close" class="md-close" @click="isLoginConfirm=false" >Close</button>
-            <a  slot="btnGroup" class="btn-wrap" >
-                <input class="btn btn-gray" type="button" value="取消" @click="isLoginConfirm=false" >
-                <input class="btn btn-gray" type="button" value="确定" @click="addCartConfirm">
-            </a>
-        </modal>
+        <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
+        <button slot="close" class="md-close" @click="isLoginConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="取消" @click="isLoginConfirm=false" >
+            <input class="btn btn-gray" type="button" value="确定" @click="addCartConfirm">
+        </a>
+    </modal>
 
 </div>
 </template>
@@ -104,7 +104,8 @@
                 pageSize:4,
                 isAddConfirm:false,
                 isLoginConfirm:false,
-                productId:''
+                productId:'',
+                isNowLogin:false
             }
         },
         components: {
@@ -157,19 +158,19 @@
                 setTimeout(()=>{
                     this.page++;
                     this.getGoods(true);
-                }, 1000);
+                }, 500);
             },
             addCart(item){
                 this.$https.post('/users/checkLogin')
                 .then((res)=>{
-                    console.log(res)
                     if(res.data.code===3000){
                         this.isLoginConfirm=true;
+                       
                         this.productId=item.productId
                     }else{
                         this.$https.post('/users/addCart',{
                             userId:'100000077',
-                            productId:this.productId,
+                            productId:item.productId,
                             productNum:1
                         }).then((res)=>{
                             console.log(res)
@@ -181,7 +182,7 @@
             },
             addCartConfirm(){
                 this.isLoginConfirm=false;
-                
+                this.$refs.child.toLogin()
             },
             toCart(){
                 this.isAddConfirm=false;

@@ -1081,6 +1081,7 @@ textarea {
 }
 
 .section-goods .section-header .modify {
+    line-height: 60px;
     float: right;
     font-size: 14px;
 }

@@ -15,6 +15,7 @@ import Detail from '@/views/detail'
 import Address from '@/views/address'
 import AddAddr from '@/views/addAddr'
 import Cart from '@/views/cart'
+import OrderSuccess from '@/views/OrderSuccess'
 
 
 Vue.use(Router)
@@ -50,7 +51,7 @@ const routes = [{
     name: 'RegistrLogin',
     component: RegisterLogin
 }, {
-    path: '/orderList',
+    path: '/orderList/',
     name: 'OrderList',
     component: OrderList,
     meta: { requireAuth: true }
@@ -73,6 +74,11 @@ const routes = [{
     path: '/addAddr',
     name: 'AddAddr',
     component: AddAddr
+
+}, {
+    path: '/orderSuccess',
+    name: 'OrderSuccess',
+    component: OrderSuccess
 
 }]
 const router = new Router({

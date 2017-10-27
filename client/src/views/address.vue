@@ -1,7 +1,7 @@
 <template>
 <div>
     <nav-header></nav-header>
-    <nav-crumbs>order</nav-crumbs>
+    <nav-crumbs>checkout</nav-crumbs>
     <div class="checkout-page">
   <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
@@ -58,7 +58,7 @@
       <div class="addr-list-wrap">
         <div class="addr-list">
           <ul>
-            <li v-for="(item,idx) in addrList" :key="idx" >
+            <li v-for="(item,idx) in addrList" :key="idx" :class="{'check':checkedIndex==idx} " @click="checkedIndex=idx;newAddressId=item.addressId" >
                 <dl>
                     <dt>{{item.userName}}</dt>
                     <dd class="address">{{item.streetName}}</dd>
@@ -120,7 +120,7 @@
       </div>
       <div class="next-btn-wrap">
         <!-- <a class="btn btn--m btn--red" >Next</a> -->
-        <router-link to="/orderList" class="btn btn--m btn--red" >Next</router-link>
+        <router-link :to="{path:'/orderList',query:{addressId:newAddressId}}" class="btn btn--m btn--red" >Next</router-link>
       </div>
     </div>
   </div>
@@ -156,7 +156,9 @@ export default {
         return {
             addrList:[],
             delAddrConfirm:false,
-            addressId:''
+            addressId:'',
+            checkedIndex:'',
+            newAddressId:''
 
         }
     },
