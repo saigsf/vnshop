@@ -6,10 +6,10 @@
             <div class="section section-order ">
                 <div class="order-info clearfix ">
                     <div class="fl ">
-                        <h2 class="title ">感谢您在本店购物！您的订单已提交成功，请记住您的订单号 <b>2017092088024</b></h2>
+                        <h2 class="title ">感谢您在本店购物！您的订单已提交成功，请记住您的订单号 <b>{{msg.orderId}}</b></h2>
                     </div>
                     <div class="fr ">
-                        <p class="total ">您的应付款金额为 <span class="money "><em>2557.00<em>元</em></em></span></p>
+                        <p class="total ">您的应付款金额为 <span class="money "><em>{{msg.orderTotal}}.00<em>元</em></em></span></p>
                     </div>
                 </div>
                 <i class="iconfont icon-right ">√</i>
@@ -18,20 +18,20 @@
                         <li class="clearfix ">
                             <div class="label ">订单号:</div>
                             <div class="content ">
-                                <div class="order-num ">2017092088024</div>
+                                <div class="order-num ">{{msg.orderId}}</div>
                             </div>
                         </li>
                         <li class="clearfix ">
                             <div class="label ">您选定的配送方式为:</div>
-                            <div class="content ">城际快递</div>
+                            <div class="content ">{{msg.shopMethod}}</div>
                         </li>
                         <li class="clearfix ">
                             <div class="label ">您选定的支付方式为:</div>
-                            <div class="content ">支付宝</div>
+                            <div class="content ">{{msg.payType}}</div>
                         </li>
                         <li class="clearfix ">
                             <div class="label ">您的应付款金额为:</div>
-                            <div class="content money "><em>2557.00<em>元</em></em>
+                            <div class="content money "><em>{{msg.orderTotal}}.00<em>元</em></em>
                             </div>
                         </li>
                     </ul>
@@ -62,16 +62,30 @@ import '../../static/css/styAll.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
 export default {
-  name: 'OrderDone',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    name: 'OrderDone',
+    components: {
+        NavHeader,
+        NavFooter
+    },
+    created(){
+        this.getInfo()
+    },
+    data () {
+        return {
+            msg: {}
+        }
+    },
+    methods: {
+        getInfo(){
+            this.$https.get('/users/getOrderInfo',{
+                userId:'100000077'
+                }).then((res)=>{
+                    this.msg=res.data.data
+                    console.log(res)
+                })
+        }
     }
-  },
-  components: {
-      NavHeader,
-      NavFooter
-  }
+  
 }
 </script>
 

@@ -3,12 +3,14 @@
     <div class="site-header" style="clear:both;">
         <div class="container">
             <div class="header-logo">
-                <a href="index.php" title="格美官网"><img src="/static/img/vn-logo.png" /></a>
+                <!-- <a href="index.php" title="格美官网"><img src="/static/img/vn-logo.png" /></a> -->
+                <router-link to="/"  title="格美官网"><img src="/static/img/vn-logo.png" /></router-link>
             </div>
             <div class="header-nav">
                 <ul class="nav-list">
                     <li class="nav-category">
-                        <a class="btn-category-list" href="catalog.php" style="display:none;">全部商品分类</a>
+                        <!-- <a class="btn-category-list" href="catalog.php" >全部商品分类</a> -->
+                        <router-link to="/goodsList" class="btn-category-list" >全部商品分类</router-link>
                     </li>
                     <li class="nav-item">
                         <a class="link" href="category.php?id=76"><span>购买电视与平板</span></a>
@@ -283,7 +285,7 @@
                 </a>
                 <!-- <router-link class="link" to="/login" rel="nofollow" >登录</router-link> -->
                 <span class="sep"   >|</span>
-                <a class="link" v-if="topName" @click="logOut" rel="nofollow">退出</a>
+                <a class="link"  v-if="topName" @click="logOut" rel="nofollow">退出</a>
                 <router-link class="link" to="/registerLogin"  v-if="!topName" rel="nofollow" >注册</router-link>
             </div>
             <!-- </div> -->
@@ -310,7 +312,7 @@
               </div>
               <ul>
                 <li class="regi_form_input">
-                  <input type="text" tabindex="1" name="loginname" v-model="userName" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
+                  <input type="text" tabindex="1"  name="loginname" v-model="userName" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
                 </li>
                 <li class="regi_form_input noMargin">
                   <i class="icon IconPwd"></i>
@@ -350,6 +352,7 @@ export default {
         // this.searchCookie();
         this.checkLogin()
     },
+    
     methods:{
         login(){
             this.$https.post('/users/login',{
@@ -376,7 +379,7 @@ export default {
         logOut(){
             this.$https.post('/users/delLogin').then(res=>{
                 this.topName=''
-                
+                this.$router.push({path:'/'})
             })
         }
     }

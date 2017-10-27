@@ -40,9 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 拦截器
 app.use(function(req, res, next) {
     //检查post的信息或者url查询参数或者头信息
-    var token = req.cookies.token;
+    var userId = req.cookies.userId;
     // 解析 token
-    if (token) {
+    if (userId) {
         next();
     } else {
         if (req.path == '/users/register' ||
@@ -53,7 +53,7 @@ app.use(function(req, res, next) {
             next();
         } else {
             // 如果没有token，则返回错误
-            return res.status(403).send({
+            return res.status(403).json({
                 success: false,
                 message: '没有登录'
             });

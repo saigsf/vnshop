@@ -7,7 +7,7 @@ module.exports = mongoose.model("Users", new Schema({
     userName: String,
     userPwd: String,
     addressList: [{
-        addressId: Number,
+        addressId: String,
         isDefault: {
             type: Boolean,
             default: false
@@ -15,7 +15,18 @@ module.exports = mongoose.model("Users", new Schema({
         postCode: String,
         streetName: String,
         tel: String,
-        userName: String
+        userName: String,
+        mobile: String,
+        Email: String,
+        sign_building: String,
+        best_time: {
+            type: Date,
+            default: Date.now
+        },
+        country: String,
+        province: String,
+        city: String,
+        district: String
     }],
     cartList: [{
         checked: {
@@ -51,6 +62,8 @@ module.exports = mongoose.model("Users", new Schema({
         }],
         orderId: String,
         orderStatus: String,
-        orderTotal: Number
+        orderTotal: Number,
+        payType: String,
+        shopMethod: String
     }]
 }))

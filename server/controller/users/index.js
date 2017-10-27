@@ -24,13 +24,19 @@ router.post('/delLogin', controller.delLogin)
 router.post('/addCart', controller.addCart);
 router.post('/getCartList', controller.getCartList);
 router.post('/deleteCart', controller.deleteCart);
+router.post('/updateCart', controller.updateCart)
+router.post('/updateNum', controller.updateProductNum)
 
 // 用户收获地址操作
 router.get('/getAddr', controller.getAddr);
 router.post('/addAddr', controller.addAddr);
 router.put('/updataAddr', controller.updataAddr);
-router.delete('/delAddr', controller.delAddr);
+router.get('/delAddr', controller.delAddr);
+router.get('/setDefault', controller.setDefaultAddr)
 
+// 
+router.post('/addOrder', controller.addOrder)
+router.get('/getOrderInfo', controller.getOrderInfo)
 
 
 

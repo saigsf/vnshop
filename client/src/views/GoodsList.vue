@@ -50,6 +50,22 @@
         </div>
     </div>
     <nav-footer/>
+    <modal :mdShow="isAddConfirm" >
+            <div slot="message" class="confirm-tips" >您已经将商品加入购物车，是要继续购物呢，还是要查看购物车</div>
+            <button slot="close" class="md-close" @click="isAddConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="继续购物" @click="isAddConfirm=false" >
+                <input class="btn btn-gray" type="button" value="查看购物车" @click="toCart">
+            </a>
+        </modal>
+    <modal :mdShow="isLoginConfirm" >
+            <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
+            <button slot="close" class="md-close" @click="isLoginConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="isLoginConfirm=false" >
+                <input class="btn btn-gray" type="button" value="确定" @click="addCartConfirm">
+            </a>
+        </modal>
 
 </div>
 </template>
@@ -59,6 +75,7 @@
     import NavHeader from '../components/NavHeader'
     import NavFooter from '../components/NavFooter'
     import NavCrumbs from '../components/NavCrumbs'
+    import Modal from '../components/Modal'
     export default{
         name: 'GoodsList',
         data(){
@@ -84,13 +101,17 @@
                 data: [],
                 busy: true,
                 page:1,
-                pageSize:4
+                pageSize:4,
+                isAddConfirm:false,
+                isLoginConfirm:false,
+                productId:''
             }
         },
         components: {
             NavHeader,
             NavFooter,
-            NavCrumbs
+            NavCrumbs,
+            Modal
         },
         created () {
             this.getGoods(); 
@@ -139,16 +160,32 @@
                 }, 1000);
             },
             addCart(item){
-                this.$https.post('/users/addCart',{
-                    userId:'100000077',
-                    productId:item.productId,
-                    productNum:1
-                }).then((res)=>{
-                    
-                    if(res.data.status===0){
-                        alert("恭喜，添加购物车成功！")
+                this.$https.post('/users/checkLogin')
+                .then((res)=>{
+                    console.log(res)
+                    if(res.data.code===3000){
+                        this.isLoginConfirm=true;
+                        this.productId=item.productId
+                    }else{
+                        this.$https.post('/users/addCart',{
+                            userId:'100000077',
+                            productId:this.productId,
+                            productNum:1
+                        }).then((res)=>{
+                            console.log(res)
+                            this.isAddConfirm=true
+                        })
                     }
                 })
+                
+            },
+            addCartConfirm(){
+                this.isLoginConfirm=false;
+                
+            },
+            toCart(){
+                this.isAddConfirm=false;
+                this.$router.push({path:'/cart'})
             }
 
         }

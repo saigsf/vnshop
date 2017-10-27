@@ -13,6 +13,7 @@ import RegisterLogin from '@/views/registerLogin'
 import OrderList from '@/views/orderList'
 import Detail from '@/views/detail'
 import Address from '@/views/address'
+import AddAddr from '@/views/addAddr'
 import Cart from '@/views/cart'
 
 
@@ -68,6 +69,11 @@ const routes = [{
     name: 'Cart',
     component: Cart,
     meta: { requireAuth: true }
+}, {
+    path: '/addAddr',
+    name: 'AddAddr',
+    component: AddAddr
+
 }]
 const router = new Router({
     routes

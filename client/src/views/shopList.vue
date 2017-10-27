@@ -307,6 +307,7 @@
 
 <script>
 import '../../static/css/styAll.css'
+
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
 // import NavCrumbs from '/static/components/NavCrumbs'

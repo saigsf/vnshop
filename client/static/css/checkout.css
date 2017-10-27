@@ -254,7 +254,7 @@ html {
 }
 
 .addr-list li .addr-set-default {
-    display: none;
+    /* display: none; */
 }
 
 .addr-list li .addr-set-default,

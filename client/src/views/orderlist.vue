@@ -12,11 +12,11 @@
                             <li class="section-options clearfix">
                                 <h3 class="section-header"><span>收货人信息</span></h3>
                                 <div class="section-body">
-                                    <div class="checkout-item active">刘先生 北京</div>
-                                    <span class="addr-name">刘先生</span>
-                                    <span class="addr-info">北京 北京 海淀区 海兴大厦</span>
-                                    <span class="addr-tel">010-25851234</span>
-                                    <a href="flow.php?step=consignee" class="modify">修改</a>
+                                    <div class="checkout-item active">{{address.userName}}</div>
+                                    <span class="addr-name">{{address.userName}}</span>
+                                    <span class="addr-info">{{address.streetName}}</span>
+                                    <span class="addr-tel">{{address.tel}}</span>
+                                    <router-link to="/address" class="modify">修改</router-link>
                                 </div>
                             </li>
                             <li class="section-options clearfix">
@@ -24,46 +24,10 @@
                                 <div class="section-body">
                                     <ul class="item-list clearfix payment-list" id="payment-list">
 
-                                        <li>
-                                            <label class="checkout-item" for="payment_1">快钱人民币网关</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_1" value="5" isCod="0" onclick="selectPayment(this)" />
-                                            <div class="text">
-                                                <i></i>手续费：0.00<em>元</em> </div>
-                                        </li>
-
-                                        <li>
-                                            <label class="checkout-item" for="payment_2">余额支付</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_2" value="1" isCod="0" onclick="selectPayment(this)" />
-                                            <div class="text">
-                                                <i></i>手续费：0.00<em>元</em> </div>
-                                        </li>
-
-                                        <li>
-                                            <label class="checkout-item" for="payment_3">银行汇款/转帐</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_3" value="2" isCod="0" onclick="selectPayment(this)" />
-                                            <div class="text">
-                                                <i></i>手续费：0.00<em>元</em> </div>
-                                        </li>
-
-                                        <li>
-                                            <label class="checkout-item" for="payment_4">货到付款</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_4" value="3" isCod="1" onclick="selectPayment(this)" disabled="true" />
-                                            <div class="text">
-                                                <i></i>手续费：<span id="ECS_CODFEE">0.00<em>元</em></span> </div>
-                                        </li>
-
-                                        <li>
-                                            <label class="checkout-item" for="payment_5">网银在线</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_5" value="4" isCod="0" onclick="selectPayment(this)" />
-                                            <div class="text">
-                                                <i></i>手续费：1% </div>
-                                        </li>
-
-                                        <li>
-                                            <label class="checkout-item" for="payment_6">支付宝</label>
-                                            <input type="radio" name="payment" class="radio" id="payment_6" value="6" checked isCod="0" onclick="selectPayment(this)" />
-                                            <div class="text">
-                                                <i></i>手续费：0.00<em>元</em> </div>
+                                        <li v-for="(item ,idx) in paymentType" :key="idx" :class="{'active':item.checked} " @click="setPayType(item)" >
+                                            <label class="checkout-item"  for="payment_1">{{item.title}}</label>
+                                            <!-- <input type="radio" name="payment" class="radio" id="payment_1" value="5" isCod="0" onclick="selectPayment(this)" /> -->
+                                            <div class="text" v-show="item.checked" ><i></i>手续费：{{item.free}}.00<em>元</em> </div>
                                         </li>
                                     </ul>
                                 </div>
@@ -72,36 +36,18 @@
                                 <h3 class="section-header"><span>配送方式</span></h3>
                                 <div class="section-body">
                                     <ul class="item-list clearfix payment-list" id="shipping-list">
-                                        <li>
-                                            <label class="checkout-item" for="ECS_NEEDINSURE_1">申通快递</label>
-                                            <input name="shipping" type="radio" id="ECS_NEEDINSURE_1" value="5" supportCod="0" insure="0" class="radio" onclick="selectShipping(this)" />
-                                            <div class="text">
-                                                <i></i>费用：15.00<em>元</em>&nbsp;&nbsp;免费额度：0.00<em>元</em> </div>
-                                        </li>
-                                        <li>
-                                            <label class="checkout-item" for="ECS_NEEDINSURE_2">城际快递</label>
-                                            <input name="shipping" type="radio" id="ECS_NEEDINSURE_2" value="3" supportCod="1" insure="0" class="radio" onclick="selectShipping(this)" />
-                                            <div class="text">
-                                                <i></i>费用：10.00<em>元</em>&nbsp;&nbsp;免费额度：100000.00<em>元</em> </div>
-                                        </li>
-                                        <li>
-                                            <label class="checkout-item" for="ECS_NEEDINSURE_3">邮局平邮</label>
-                                            <input name="shipping" type="radio" id="ECS_NEEDINSURE_3" value="6" supportCod="0" insure="0" class="radio" onclick="selectShipping(this)" />
-                                            <div class="text">
-                                                <i></i>费用：3.50<em>元</em>&nbsp;&nbsp;免费额度：50000.00<em>元</em> </div>
-                                        </li>
-                                        <li>
-                                            <label class="checkout-item" for="ECS_NEEDINSURE_4">中通速递</label>
-                                            <input name="shipping" type="radio" id="ECS_NEEDINSURE_4" value="10" supportCod="0" insure="1%" class="radio" onclick="selectShipping(this)" />
-                                            <div class="text">
-                                                <i></i>费用：10.00<em>元</em>&nbsp;&nbsp;免费额度：0.00<em>元</em> </div>
+                                        <li v-for="(item ,idx) in shopMethods" :key="idx" :class="{'active':item.checked} " @click="setShopMethod(item)" >
+                                            <label class="checkout-item"  for="payment_1">{{item.title}}</label>
+                                            <!-- <input type="radio" name="payment" class="radio" id="payment_1" value="5" isCod="0" onclick="selectPayment(this)" /> -->
+                                            <div class="text" v-show="item.checked" >
+                                                <i></i>费用：{{item.free}}.00<em>元</em>&nbsp;&nbsp;免费额度：100000.00<em>元</em>
+                                            </div>
                                         </li>
                                     </ul>
                                     <div style="margin-top:20px;">
                                         <label for="ECS_NEEDINSURE">
-                    <input name="need_insure" id="ECS_NEEDINSURE" type="checkbox"  onclick="selectInsure(this.checked)" value="1"  disabled="true"  />
-                    配送是否需要保价 
-                    </label>
+                                            <input name="need_insure" id="ECS_NEEDINSURE" type="checkbox"  onclick="selectInsure(this.checked)" value="1"  disabled="true"  /> 配送是否需要保价 
+                                        </label>
                                     </div>
                                 </div>
                             </li>
@@ -109,47 +55,28 @@
                             <li class="section-options clearfix section-goods">
                                 <div class="section-header clearfix">
                                     <h3 class="title">商品列表</h3>
-                                    <a href="flow.php" class="modify">返回购物车<i class="iconfont"></i></a> </div>
+                                    <router-link to="/cart" class="modify">返回购物车<i class="iconfont"></i></router-link>
+                                </div>
                                 <table width="100%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" class="goods-list-table">
-                                    <tr>
-                                        <td bgcolor="#ffffff">
-                                            <img src="/static/images/201507/31_thumb_G_1437075539254.jpg" title="小米移动电源10000mAh" width="30" height="30" />
-
-                                            <a href="goods.php?id=31" target="_blank" class="f6">小米移动电源10000mAh&nbsp;</a>
-
-
-                                        </td>
-                                        <td bgcolor="#ffffff" align="center">79.00<em>元</em>&nbsp;x&nbsp;2</td>
-                                        <td bgcolor="#ffffff" align="center"><span style="color:#ff6700;">158.00<em>元</em></span></td>
+                                    <tr bgcolor="#cccccc">
+                                        <th  align="center" style="text-align:center" >商品信息</th>
+                                        <th align="center" style="text-align:center">单价*数量</th>
+                                        <th align="center" style="text-align:center">价格小计</th>
                                     </tr>
-                                    <tr>
+                                    <tr  v-for="(item,idx) in goodsList" :key="idx" v-if="item.checked==='1'">
                                         <td bgcolor="#ffffff">
-                                            <img src="/static/images/201507/27_thumb_G_1437074702008.jpg" title="小米电视2 40英寸" width="30" height="30" />
-
-                                            <a href="goods.php?id=27" target="_blank" class="f6">小米电视2 40英寸&nbsp;尺寸:45 
-        颜色:黄[100] 
-        </a>
-
-
+                                            <img :src="'/static/img/'+item.productImage" :title="item.productName" width="30" height="30" />
+                                            <a  target="_blank" class="f6">{{item.productName}} </a>
                                         </td>
-                                        <td bgcolor="#ffffff" align="center">2300.00<em>元</em>&nbsp;x&nbsp;1</td>
-                                        <td bgcolor="#ffffff" align="center"><span style="color:#ff6700;">2300.00<em>元</em></span></td>
+                                        <td bgcolor="#ffffff" align="center">{{item.salePrice}}<em>元</em>&nbsp;x&nbsp;{{item.productNum}}</td>
+                                        <td bgcolor="#ffffff" align="center"><span style="color:#ff6700;">{{item.salePrice*item.productNum}}.00<em>元</em></span></td>
                                     </tr>
-                                    <tr>
-                                        <td bgcolor="#ffffff">
-                                            <img src="/static/images/201507/45_thumb_G_1437092199733.jpg" title="小米活塞耳机标准版" width="30" height="30" />
-
-                                            <a href="goods.php?id=45" target="_blank" class="f6">小米活塞耳机标准版&nbsp;</a>
-
-
-                                        </td>
-                                        <td bgcolor="#ffffff" align="center">89.00<em>元</em>&nbsp;x&nbsp;1</td>
-                                        <td bgcolor="#ffffff" align="center"><span style="color:#ff6700;">89.00<em>元</em></span></td>
-                                    </tr>
-
                                     <tr>
                                         <td bgcolor="#ffffff" colspan="7">
-                                            购物金额小计 2547.00<em>元</em>，比市场价 3034.80<em>元</em> 节省了 487.80<em>元</em> (16%)</td>
+                                            <!-- <span  >您还没有加入商品</span> -->
+                                            <span>购物金额小计 2547.00<em>元</em>，比市场价 3034.80<em>元</em> 节省了 487.80<em>元</em> (16%)</span>
+                                            
+                                        </td>
                                     </tr>
                                 </table>
                             </li>
@@ -158,14 +85,14 @@
                             <li class="section-options clearfix section-goods">
                                 <h3 class="section-header"><span>祝福贺卡</span></h3>
                                 <table width="100%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="cardTable" class="goods-list-table">
-                                    <tr>
+                                    <tr >
                                         <th bgcolor="#ffffff" width="5%" scope="col">&nbsp;</th>
                                         <th bgcolor="#ffffff" width="35%" scope="col">名称</th>
                                         <th bgcolor="#ffffff" width="22%" scope="col" align="center">价格</th>
                                         <th bgcolor="#ffffff" width="22%" scope="col" align="center">免费额度</th>
                                         <th bgcolor="#ffffff" scope="col" align="center">图片</th>
                                     </tr>
-                                    <tr>
+                                    <tr >
                                         <td bgcolor="#ffffff" valign="top"><input type="radio" name="card" value="0" checked="true" onclick="selectCard(this)" /></td>
                                         <td bgcolor="#ffffff" valign="top"><strong>不要贺卡</strong></td>
                                         <td bgcolor="#ffffff" valign="top" align="center">&nbsp;</td>
@@ -248,16 +175,16 @@
                                 <div class="section-body">
                                     <ul class="item-list clearfix" id="quehuo-list">
                                         <li>
-                                            <label class="checkout-item" for="how_oos_0" onclick="javascript:void(0);">等待所有商品备齐后再发</label>
-                                            <input name="how_oos" id="how_oos_0" type="radio" value="0" class="radio" checked onclick="changeOOS(this)" />
+                                            <label class="checkout-item" for="how_oos_0" >等待所有商品备齐后再发</label>
+                                            <!-- <input name="how_oos" id="how_oos_0" type="radio" value="0" class="radio" checked onclick="changeOOS(this)" /> -->
                                         </li>
                                         <li>
-                                            <label class="checkout-item" for="how_oos_1" onclick="javascript:void(0);">取消订单</label>
-                                            <input name="how_oos" id="how_oos_1" type="radio" value="1" class="radio" onclick="changeOOS(this)" />
+                                            <label class="checkout-item" for="how_oos_1"  >取消订单</label>
+                                            <!-- <input name="how_oos" id="how_oos_1" type="radio" value="1" class="radio" onclick="changeOOS(this)" /> -->
                                         </li>
                                         <li>
-                                            <label class="checkout-item" for="how_oos_2" onclick="javascript:void(0);">与店主协商</label>
-                                            <input name="how_oos" id="how_oos_2" type="radio" value="2" class="radio" onclick="changeOOS(this)" />
+                                            <label class="checkout-item" for="how_oos_2" >与店主协商</label>
+                                            <!-- <input name="how_oos" id="how_oos_2" type="radio" value="2" class="radio" onclick="changeOOS(this)" /> -->
                                         </li>
                                     </ul>
                                 </div>
@@ -269,23 +196,25 @@
                                         <li class="clearfix">
                                             <label>订购即送：</label>
                                             <span class="val"> 
-            <font class="f4_b">2547</font> 积分            ，以及价值               <font class="f4_b">0.00<em>元</em></font>的红包。
-          
-        </span>
+                                                <font class="f4_b">{{totalPrice}}</font> 积分            ，以及价值               <font class="f4_b">0.00<em>元</em></font>的红包。
+                                            
+                                            </span>
                                         </li>
                                         <li class="clearfix">
-                                            <label>商品总价：</label><span class="val">2547.00<em>元</em></span>
+                                            <label>商品总价：</label><span class="val">{{totalPrice}}.00<em>元</em></span>
                                         </li>
                                         <li class="clearfix total-price">
-                                            <label>应付款金额：</label> <span class="val"><em>2547.00<em>元</em></em></span>
+                                            <label>应付款金额：</label> <span class="val"><em>{{totalPrice}}.00<em>元</em></em></span>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="section-options clearfix" style="border-bottom:none;">
                                 <div style="margin:8px auto; text-align:right;">
-                                    <input type="image" src="/static/img/bnt_subOrder.gif" />
-                                    <input type="hidden" name="step" value="done" />
+                                    <!-- <router-link to="/orderDone" > -->
+                                        <input class="btn btn--orange" type="button" value="提交订单" @click="orderDone" />
+                                    <!-- </router-link> -->
+                                    <!-- <input type="hidden" name="step" value="done" /> -->
                                 </div>
                             </li>
                         </ul>
@@ -303,16 +232,148 @@ import '../../static/css/styAll.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
 export default {
-  name: 'orderList',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    name: 'orderList',
+    components: {
+        NavHeader,
+        NavFooter
+    },
+    created () {
+        this.getCheckedGoods();
+        this.getAddrList()
+    },
+    data () {
+        return {
+            goodsList:[],
+            address:{},
+            totalPrice:0,
+            paymentType:[
+                {
+                    title:'快钱人民币网关',
+                    free:3,
+                    checked:false
+                },{
+                    title:'余额支付',
+                    free:3,
+                    checked:false
+                },{
+                    title:'银行汇款/转账',
+                    free:3,
+                    checked:false
+                },{
+                    title:'货到付款',
+                    free:3,
+                    checked:false
+                },{
+                    title:'网银在线',
+                    free:3,
+                    checked:false
+                },{
+                    title:'支付宝',
+                    free:3,
+                    checked:false
+                }
+            ],
+            shopMethods:[
+                {
+                    title:'申通快递',
+                    free:15,
+                    checked:false
+                },{
+                    title:'城际快递',
+                    free:10,
+                    checked:false
+                },{
+                    title:'邮局平邮',
+                    free:3,
+                    checked:false
+                },{
+                    title:'中通快递',
+                    free:5,
+                    checked:false
+                }
+            ],
+            payType:'',
+            shopMethod:''
+        }
+    },
+    methods:{
+        getCheckedGoods(){
+            this.$https.post('/users/getCartList',{
+                    userId:'100000077'
+                }).then((res)=>{
+                    console.log(res)
+                    this.goodsList=res.data.data
+                    this.getTotal();
+
+                })
+        },
+        getAddrList(){
+            this.$https.get('/users/getAddr',{
+                params:{
+                    userId:'100000077'
+                }
+            }).then(result=>{
+                var res=result.data.data;
+                
+                res.forEach((item)=> {
+                    if(item.isDefault){
+                        this.address=item
+                    }
+                });
+                
+                
+            })
+        },
+        getTotal(){
+            console.log(this.goodsList)
+            this.goodsList.forEach((item)=>{
+                if(item.checked=='1'){
+                    this.totalPrice+=item.salePrice*item.productNum
+                }
+            });
+        },
+        setPayType(item){
+            this.paymentType.forEach(function(val){
+                val.checked=false
+            })
+            item.checked=!item.checked;
+
+        },
+        setShopMethod(item){
+            this.shopMethods.forEach(function(val){
+                val.checked=false
+            })
+            item.checked=!item.checked;
+        },
+        orderDone(){
+
+            this.getType()
+            this.$https.post('/users/addOrder',{
+                    userId:'100000077',
+                    addressId :this.address.addressId,
+                    orderTotal :this.totalPrice,
+                    payType :this.payType,
+                    shopMethod : this.shopMethod,
+                }).then((res)=>{
+                    console.log(res)
+                    this.$router.push({path:'/orderDone'})
+
+                })
+        },
+        getType(){
+            this.paymentType.forEach(function(item){
+                if(item.checked){
+                    this.payType=item.title
+                }
+            },this);
+            this.shopMethods.forEach(function(item){
+                if(item.checked){
+                    this.shopMethod=item.title
+                }
+            },this)
+        }
+
     }
-  },
-  components: {
-      NavHeader,
-      NavFooter
-  }
 }
 </script>
 

@@ -1,157 +1,139 @@
 <template>
 <div>
     <nav-header></nav-header>
-    <div class="cle cart_main">
-        
-        <div class="page-main">
+    <nav-crumbs>order</nav-crumbs>
+    <div class="checkout-page">
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <symbol id="icon-add" viewBox="0 0 31 32">
+        <title>add</title>
+        <path class="path1" d="M30.745 15.152h-14.382v-14.596c0-0.308-0.243-0.557-0.543-0.557s-0.543 0.249-0.543 0.557v14.596h-14.665c-0.3 0-0.543 0.249-0.543 0.557s0.243 0.557 0.543 0.557h14.665v15.177c0 0.307 0.243 0.557 0.543 0.557s0.543-0.249 0.543-0.557v-15.177h14.382c0.3 0 0.543-0.249 0.543-0.557s-0.243-0.557-0.543-0.557z"></path>
+      </symbol>
+      <symbol id="icon-ok" viewBox="0 0 32 32">
+        <title>ok</title>
+        <path class="path1" d="M14.084 20.656l-7.845-9.282c-1.288-1.482-3.534-1.639-5.016-0.351s-1.639 3.534-0.351 5.016l10.697 12.306c1.451 1.669 4.057 1.623 5.448-0.096l18.168-22.456c1.235-1.527 0.999-3.765-0.528-5.001s-3.765-0.999-5.001 0.528l-15.573 19.337z"></path>
+      </symbol>
+      <symbol id="icon-edit" viewBox="0 0 32 32">
+        <title>edit</title>
+        <path class="path1" d="M28.287 8.51l-4.805-4.806 0.831-0.831c0.472-0.472 1.086-0.777 1.564-0.777 0.248 0 0.452 0.082 0.622 0.253l3.143 3.144c0.539 0.54 0.133 1.529-0.524 2.186l-0.831 0.831zM26.805 9.992l-1.138 1.138-4.805-4.806 1.138-1.138 4.805 4.806zM24.186 12.612l-14.758 14.762-4.805-4.806 14.758-14.762 4.805 4.806zM7.379 28.288l-4.892 1.224 1.223-4.894 3.669 3.67zM31.123 4.011l-3.143-3.144c-0.567-0.567-1.294-0.867-2.103-0.867-1.036 0-2.174 0.52-3.045 1.391l-20.429 20.436c-0.135 0.134-0.23 0.302-0.276 0.487l-2.095 8.385c-0.089 0.355 0.017 0.736 0.276 0.995 0.198 0.198 0.461 0.307 0.741 0.307 0.085 0 0.171-0.010 0.254-0.031l8.381-2.096c0.185-0.047 0.354-0.142 0.487-0.276l20.43-20.436c1.409-1.41 2.042-3.632 0.524-5.15v0z"></path>
+      </symbol>
+      <symbol id="icon-del" viewBox="0 0 32 32">
+        <title>delete</title>
+        <path class="path1" d="M11.355 4.129v-2.065h9.29v2.065h-9.29zM6.194 29.935v-23.742h19.613v23.742h-19.613zM30.968 4.129h-8.258v-3.097c0-0.569-0.463-1.032-1.032-1.032h-11.355c-0.569 0-1.032 0.463-1.032 1.032v3.097h-8.258c-0.569 0-1.032 0.463-1.032 1.032s0.463 1.032 1.032 1.032h3.097v24.774c0 0.569 0.463 1.032 1.032 1.032h21.677c0.569 0 1.032-0.463 1.032-1.032v-24.774h3.097c0.569 0 1.032-0.463 1.032-1.032s-0.463-1.032-1.032-1.032v0z"></path>
+        <path class="path2" d="M10.323 9.806c-0.569 0-1.032 0.463-1.032 1.032v14.452c0 0.569 0.463 1.032 1.032 1.032s1.032-0.463 1.032-1.032v-14.452c0-0.569-0.463-1.032-1.032-1.032z"></path>
+        <path class="path3" d="M16 9.806c-0.569 0-1.032 0.463-1.032 1.032v14.452c0 0.569 0.463 1.032 1.032 1.032s1.032-0.463 1.032-1.032v-14.452c0-0.569-0.463-1.032-1.032-1.032z"></path>
+        <path class="path4" d="M21.677 9.806c-0.569 0-1.032 0.463-1.032 1.032v14.452c0 0.569 0.463 1.032 1.032 1.032s1.032-0.463 1.032-1.032v-14.452c0-0.569-0.463-1.032-1.032-1.032z"></path>
+      </symbol>
+      <symbol id="icon-clock" viewBox="0 0 32 32">
+        <title>clock</title>
+        <path class="path1" d="M29.333 16c0-7.364-5.97-13.333-13.333-13.333s-13.333 5.97-13.333 13.333c0 7.364 5.97 13.333 13.333 13.333s13.333-5.97 13.333-13.333v0 0 0 0 0 0zM0 16c0-8.837 7.163-16 16-16s16 7.163 16 16c0 8.837-7.163 16-16 16s-16-7.163-16-16zM14.667 14.667v1.333h2.667v-10.667h-2.667v9.333zM24 18.667h1.333v-2.667h-10.667v2.667h9.333z"></path>
+      </symbol>
+      <symbol id="icon-question" viewBox="0 0 32 32">
+        <title>question</title>
+        <path class="path1" d="M16 2.56c7.411 0 13.44 6.029 13.44 13.44s-6.029 13.44-13.44 13.44c-7.411 0-13.44-6.029-13.44-13.44s6.029-13.44 13.44-13.44zM16 0c-8.822 0-16 7.178-16 16s7.178 16 16 16c8.822 0 16-7.178 16-16s-7.178-16-16-16z"></path>
+        <path class="path2" d="M16 22.080c-1.059 0-1.92 0.861-1.92 1.92s0.861 1.92 1.92 1.92c1.059 0 1.92-0.861 1.92-1.92s-0.861-1.92-1.92-1.92z"></path>
+        <path class="path3" d="M12.16 12.48c0.706 0 1.28-0.574 1.28-1.28 0-1.412 1.148-2.56 2.56-2.56s2.56 1.148 2.56 2.56c0 1.412-1.148 2.56-2.56 2.56-0.706 0-1.28 0.574-1.28 1.28v3.84c0 0.706 0.574 1.28 1.28 1.28s1.28-0.574 1.28-1.28v-2.723c2.224-0.575 3.84-2.616 3.84-4.957 0-2.823-2.297-5.12-5.12-5.12s-5.12 2.297-5.12 5.12c0 0.706 0.574 1.28 1.28 1.28z"></path>
+      </symbol>
+    </defs>
+  </svg>
+  <div class="container">
+    <div class="checkout-addr">
+      <div class="page-title-normal">
+        <h2 class="page-title-h2"><span>check out</span></h2>
+      </div>
+      <!-- process step -->
+      <div class="check-step">
+        <ul>
+          <li class="cur"><span>Confirm</span> address</li>
+          <li><span>View your</span> order</li>
+          <li><span>Make</span> payment</li>
+          <li><span>Order</span> confirmation</li>
+        </ul>
+      </div>
 
-            <div class="container">
-                <form action="flow.php" method="post" name="theForm" id="theForm" onsubmit="return checkConsignee(this)">
-                    <div class="checkout-box">
-
-                        <h2 class="aui_title" style="cursor: move;">收货人信息</h2>
-
-                        <ul class="box-main clearfix" id="addr-form">
-
-                            <li class="section-options clearfix">
-                                <label class="section-header">配送区域:</label>
-                                <div class="section-body section-address">
-                                    <div class="dropdown">
-                                        <label class="iconfont"></label>
-                                        <select name="country" id="selCountries_0" onchange="region.changed(this, 1, 'selProvinces_0')" class="input-select">
-                        <option value="0">请选择国家</option>
-                                                <option value="1" selected>中国</option>
-                                              </select>
-                                    </div>
-                                    <div class="dropdown">
-                                        <label class="iconfont"></label>
-                                        <select name="province" id="selProvinces_0" onchange="region.changed(this, 2, 'selCities_0')" class="input-select">
-                                                <option value="0">请选择省</option>
-                                                <option value="2" >北京</option>
-                                                <option value="3" >安徽</option>
-                                                <option value="4" >福建</option>
-                                                <option value="5" >甘肃</option>
-                                                <option value="6" >广东</option>
-                                                <option value="7" >广西</option>
-                                                <option value="8" >贵州</option>
-                                                <option value="9" >海南</option>
-                                                <option value="10" >河北</option>
-                                                <option value="11" >河南</option>
-                                                <option value="12" >黑龙江</option>
-                                                <option value="13" >湖北</option>
-                                                <option value="14" >湖南</option>
-                                                <option value="15" >吉林</option>
-                                                <option value="16" >江苏</option>
-                                                <option value="17" >江西</option>
-                                                <option value="18" >辽宁</option>
-                                                <option value="19" >内蒙古</option>
-                                                <option value="20" >宁夏</option>
-                                                <option value="21" >青海</option>
-                                                <option value="22" >山东</option>
-                                                <option value="23" >山西</option>
-                                                <option value="24" >陕西</option>
-                                                <option value="25" >上海</option>
-                                                <option value="26" >四川</option>
-                                                <option value="27" >天津</option>
-                                                <option value="28" >西藏</option>
-                                                <option value="29" >新疆</option>
-                                                <option value="30" >云南</option>
-                                                <option value="31" >浙江</option>
-                                                <option value="32" >重庆</option>
-                                                <option value="33" >香港</option>
-                                                <option value="34" >澳门</option>
-                                                <option value="35" >台湾</option>
-                                              </select>
-                                    </div>
-                                    <div class="dropdown">
-                                        <label class="iconfont"></label>
-                                        <select name="city" id="selCities_0" onchange="region.changed(this, 3, 'selDistricts_0')" class="input-select">
-                        <option value="0">请选择市</option>
-                                              </select>
-                                    </div>
-                                    <div class="dropdown">
-                                        <label class="iconfont"></label>
-                                        <select name="district" id="selDistricts_0" style="display:none" class="input-select">
-                        <option value="0">请选择区</option>
-                                              </select>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header"><em>*</em>收货人姓名</label>
-                                <div class="section-body">
-                                    <input name="consignee" type="text" class="input-text" id="consignee_0" value="" />
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header"><em>*</em>电子邮件地址</label>
-                                <div class="section-body">
-                                    <input name="email" type="text" class="input-text" id="email_0" value="" />
-                                </div>
-                            </li>
-
-
-
-                            <li class="section-options clearfix">
-                                <label class="section-header"><em>*</em>详细地址</label>
-                                <div class="section-body">
-                                    <input name="address" type="text" class="input-text" id="address_0" value="" />
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header">邮政编码</label>
-                                <div class="section-body">
-                                    <input name="zipcode" type="text" class="input-text" id="zipcode_0" value="" />
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header"><em>*</em>电话</label>
-                                <div class="section-body">
-                                    <input name="tel" type="text" class="input-text" id="tel_0" value="" />
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header">手机</label>
-                                <div class="section-body">
-                                    <input name="mobile" type="text" class="input-text" id="mobile_0" value="" />
-                                </div>
-                            </li>
-
-
-
-
-                            <li class="section-options clearfix">
-                                <label class="section-header">标志建筑</label>
-                                <div class="section-body">
-                                    <input name="sign_building" type="text" class="input-text" id="sign_building_0" value="" />
-                                </div>
-                            </li>
-                            <li class="section-options clearfix">
-                                <label class="section-header">最佳送货时间</label>
-                                <div class="section-body">
-                                    <input name="best_time" type="text" class="input-text" id="best_time_0" value="" />
-                                </div>
-                            </li>
-                        </ul>
-
-
-                        <div class="form-confirm clearfix">
-                            <input type="button" name="Submit" class="btn btn-primary" @click="add"  value="配送至这个地址" />
-                            <input type="hidden" name="step" value="consignee" />
-                            <input type="hidden" name="act" value="checkout" />
-                            <input name="address_id" type="hidden" value="" />
-
-
-
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-
+      <!-- address list -->
+      <div class="page-title-normal checkout-title">
+        <h2><span>Shipping address</span></h2>
+      </div>
+      <div class="addr-list-wrap">
+        <div class="addr-list">
+          <ul>
+            <li v-for="(item,idx) in addrList" :key="idx" >
+                <dl>
+                    <dt>{{item.userName}}</dt>
+                    <dd class="address">{{item.streetName}}</dd>
+                    <dd class="tel">{{item.tel}}</dd>
+                </dl>
+                <div class="addr-opration addr-del" @click="delAddr(item)" >
+                    <a href="javascript:;" class="addr-del-btn">
+                    <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
+                    </a>
+                </div>
+                <div class="addr-opration addr-set-default" v-if="!item.isDefault" @click="setDefault(item)" >
+                    <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
+                </div>
+                <div class="addr-opration addr-default" v-else >Default address</div>
+            </li>
+            <li class="addr-new">
+              <div class="add-new-inner"  >
+                  <router-link to="/addAddr">
+                <i class="icon-add">
+                  <svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg>
+                </i>
+                <p>Add new address</p>
+                </router-link>
+              </div>
+            </li>
+          </ul>
         </div>
+
+        <div class="shipping-addr-more">
+          <a class="btn addr-more-btn up-down-btn" href="javascript:;"  >
+            more
+            <i class="i-up-down">
+              <i class="i-up-down-l"></i>
+              <i class="i-up-down-r"></i>
+            </i>
+          </a>
+        </div>
+      </div>
+
+      <!-- shipping method-->
+      <div class="page-title-normal checkout-title">
+        <h2><span>Shipping method</span></h2>
+      </div>
+      <div class="lemall-msg-info hidden">
+        <span>The region you selected is not within our delivery area. Please select another shipping address within our delivery areas.</span>
+      </div>
+      <div class="shipping-method-wrap">
+        <div class="shipping-method">
+          <ul>
+            <li class="check">
+              <div class="name">Standard shipping</div>
+              <div class="price">Free</div>
+              <div class="shipping-tips">
+                <p>Once shipped，Order should arrive in the destination in 1-7 business days</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="next-btn-wrap">
+        <!-- <a class="btn btn--m btn--red" >Next</a> -->
+        <router-link to="/orderList" class="btn btn--m btn--red" >Next</router-link>
+      </div>
     </div>
+  </div>
+</div>
     <nav-footer></nav-footer>
+    <modal :mdShow="delAddrConfirm">
+        <div slot="message" class="confirm-tips" >亲！您确定要删除该地址吗？</div>
+        <button slot="close" class="md-close" @click="delAddrConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="取消" @click="delAddrConfirm=false" >
+            <input class="btn btn-gray" type="button" value="确定" @click="delAddrOk">
+        </a>
+    </modal>
 </div>
 </template>
 
@@ -160,33 +142,65 @@ import '../../static/css/styAll.css'
 
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
+import NavCrumbs from '../components/NavCrumbs'
+import Modal from '../components/Modal'
 export default {
     name: 'address',
     components: {
         NavHeader,
-        NavFooter
+        NavFooter,
+        NavCrumbs,
+        Modal
     },
     data () {
         return {
-            address :{
-                addressId: 1,
-                isDefault: false,
-                postCode: '710000',
-                streetName: '陕西省西安市碑林区长安北路111号1401室',
-                tel: '18659131413',
-                userName: '高世飞'
-            }
+            addrList:[],
+            delAddrConfirm:false,
+            addressId:''
+
         }
     },
+    created () {
+        this.getAddrList()
+    },
     methods: {
-        add(){
-            this.$https.post('/users/addAddr',{
-                userId:'100000077',
-                address:this.address
+        getAddrList(){
+            this.$https.get('/users/getAddr',{
+                params:{
+                    userId:'100000077'
+                }
             }).then(res=>{
-                console(res)
+                // console.log(res)
+                this.addrList=res.data.data
+            })
+        },
+        delAddr(item){
+            this.delAddrConfirm=true;
+            this.addressId=item.addressId;
+        },
+        delAddrOk(){
+            this.delAddrConfirm=false
+            this.$https.get('/users/delAddr',{
+                params:{
+                    userId:'100000077',
+                    addressId:this.addressId
+                }
+            }).then(res=>{
+                this.getAddrList()
+            })
+        },
+        setDefault(item){
+            item.isDefault=true;
+            this.$https.get('/users/setDefault',{
+                params:{
+                    userId:'100000077',
+                    addressId:item.addressId
+                }
+            }).then(res=>{
+                this.getAddrList()
             })
         }
+
     }
 }
 </script>

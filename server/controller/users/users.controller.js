@@ -121,7 +121,7 @@ exports.login = function(req, res, next) {
                 // });
                 res.cookie('userId', result.userId, {
                     path: '/',
-                    maxAge: 1000 * 60 * 60
+                    maxAge: 1000 * 60 * 60 * 24
                 });
                 res.cookie('userName', result.userName, {
                     path: '/',
@@ -164,7 +164,7 @@ exports.login = function(req, res, next) {
 exports.checkLogin = function(req, res, next) {
     if (req.cookies.userId) {
         res.json({
-            code: 3000,
+            code: 0,
             success: false,
             message: "您已登录",
             data: req.cookies.userName
@@ -335,104 +335,124 @@ exports.getCartList = function(req, res, next) {
     })
 }
 
+// 更新购物车商品状态
+exports.updateCart = function(req, res, next) {
+    console.log("=====put cate=====");
+    let userId = req.body.userId,
+        productId = req.body.productId,
+        checked = req.body.checked;
+
+    Users.update({ userId: userId, 'cartList.productId': productId }, {
+        'cartList.$.checked': checked
+    }, function(err, result) {
+        if (err) {
+            console.log(err);
+            res.json({
+                code: 1,
+                msg: err.message
+            })
+        } else {
+            res.json({
+                code: 1,
+                msg: '成功'
+            })
+        }
+    })
+
+}
+
+// 更新购物车商品数量
+exports.updateProductNum = function(req, res, next) {
+    console.log("=====put cate=====");
+    let userId = req.body.userId,
+        productId = req.body.productId,
+        productNum = req.body.productNum;
+
+    Users.update({ userId: userId, 'cartList.productId': productId }, {
+        'cartList.$.productNum': productNum
+    }, function(err, result) {
+        if (err) {
+            console.log(err);
+            res.json({
+                code: 1,
+                msg: err.message
+            })
+        } else {
+            res.json({
+                code: 1,
+                msg: '成功'
+            })
+        }
+    })
+
+}
+
 // 删除购物车列表
 exports.deleteCart = function(req, res, next) {
     console.log(req.body)
-    let userId = req.body.userId;
+    let userId = req.query.userId || req.cookies.userId;
     let productId = req.body.productId;
-    Users.findOne({ userId: userId }, function(err, user) {
-
-        if (err) {
-            res.json({
-                status: 1,
-                msg: "删除购物车失败",
-                data: err.message
-            })
-        } else {
-            if (user) {
-                user.cartList.forEach(function(item) {
-                    if (item.productId == productId) {
-                        user.cartList.remove(item)
-                    }
+    Users.update({ userId: userId }, { $pull: { 'cartList': { productId: productId } } },
+        function(err, result) {
+            if (err) {
+                console.log(err);
+                res.json({
+                    code: 1,
+                    msg: err.message
                 })
-                user.save(function(err1) {
-                    if (err1) {
-                        res.json({
-                            status: 1,
-                            msg: "删除购物车失败",
-                            data: err1.message
-                        })
-                    } else {
-                        res.json({
-                            status: 0,
-                            msg: "删除购物车成功",
-                            data: user.cartList
-                        })
-                    }
-                })
-
-
             } else {
                 res.json({
-                    status: 1,
-                    msg: "删除购物车失败",
-                    data: []
+                    code: 0,
+                    msg: '成功',
+                    data: result
                 })
             }
-        }
-
-    })
+        })
 
 }
 
 // 获取地址
 exports.getAddr = function(req, res, next) {
-    let userId = req.param('userId')
+    let userId = req.param('userId') || req.cookies.userId
 
-    Users.findOne({
-        userId: userId
-    }, function(err, result) {
-        if (err) {
-            res.json({
-                code: 3000,
-                success: false,
-                message: "用户信息获取失败，系统错误",
-                data: err.message
-            })
-        } else {
-            if (result) {
+    Users.findOne({ userId: userId })
+        .exec(function(err, result) {
+            if (err) {
                 res.json({
-                    code: 0,
-                    success: true,
-                    message: "用户信息获取成功",
-                    data: result.addressList
-                })
-
-            } else {
-                res.json({
-                    code: 4000,
+                    code: 3000,
                     success: false,
-                    message: "用户不存在",
-                    data: []
+                    message: "用户信息获取失败，系统错误",
+                    data: err.message
                 })
-            }
-        }
+            } else {
+                if (result) {
+                    res.json({
+                        code: 0,
+                        success: true,
+                        message: "用户信息获取成功",
+                        data: result.addressList
+                    })
 
-    })
+                } else {
+                    res.json({
+                        code: 4000,
+                        success: false,
+                        message: "用户不存在",
+                        data: []
+                    })
+                }
+            }
+
+        })
 }
 
 // 添加地址
 exports.addAddr = function(req, res, next) {
-    let userId = req.body.userId
+    let userId = req.body.userId,
+        address = req.body.address;
     console.log(req.body.address)
-    let address = {
-        addressId: 2,
-        isDefault: false,
-        postCode: '710000',
-        streetName: '陕西省西安市碑林区长安北路111号1401室',
-        tel: '18659131413',
-        userName: 'gsf'
-    }
+
+    // 需要生成addressId
     Users.findOne({
         userId: userId
     }, function(err, user) {
@@ -481,10 +501,193 @@ exports.addAddr = function(req, res, next) {
 // 更新地址
 exports.updataAddr = function(req, res, next) {
     console.log("=====put cate=====");
+    let userId = req.query.userId || req.cookies.userId,
+        address = req.body.address;
 
 }
 
 //删除地址
 exports.delAddr = function(req, res, next) {
+    let userId = req.query.userId || req.cookies.userId,
+        addressId = req.query.addressId;
+    Users.update({ userId: userId }, { $pull: { 'addressList': { addressId: addressId } } },
+        function(err, result) {
+            if (err) {
+                console.log(err);
+                res.json({
+                    code: 1,
+                    msg: err.message
+                })
+            } else {
+                res.json({
+                    code: 0,
+                    msg: '成功',
+                    data: result
+                })
+            }
+        })
+}
 
+// 设置默认地址
+exports.setDefaultAddr = function(req, res, next) {
+    let userId = req.query.userId || req.cookies.userId,
+        addressId = req.query.addressId;
+
+    Users.update({ userId: userId, 'addressList.isDefault': true }, {
+            'addressList.$.isDefault': false
+        },
+        function(err, result) {
+            if (err) {
+                console.log(err);
+                res.json({
+                    code: 1,
+                    msg: err.message
+                })
+            } else {
+                Users.update({ userId: userId, 'addressList.addressId': addressId }, {
+                        'addressList.$.isDefault': true
+                    },
+                    function(err, result) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                code: 1,
+                                msg: err.message
+                            })
+                        } else {
+                            res.json({
+                                code: 0,
+                                msg: '成功',
+                                data: result
+                            })
+                        }
+                    })
+            }
+        })
+
+}
+
+
+
+// 添加订单
+exports.addOrder = function(req, res, next) {
+    let userId = req.body.userId || req.cookies.userId,
+        goodsList = [],
+        addressId = req.body.addressId,
+        orderTotal = req.body.orderTotal,
+        payType = req.body.payType,
+        shopMethod = req.body.shopMethod,
+        orderStatus = req.body.orderStatus || 0, //1表示已支付，0表示未支付
+        orderId = '2017092088024';
+    console.log(req.body)
+    let orderList = {
+        goodsList: goodsList,
+        addressInfo: {},
+        orderTotal: orderTotal,
+        payType: payType,
+        shopMethod: shopMethod,
+        orderStatus: orderStatus,
+        orderId: orderId
+    }
+    Users.findOne({ userId: userId })
+        .exec(function(err, result) {
+            if (err) {
+                res.json({
+                    code: 3000,
+                    success: false,
+                    message: "用户信息获取失败，系统错误",
+                    data: err.message
+                })
+            } else {
+                if (result) {
+                    result.cartList.forEach(function(item) {
+                        if (item.checked === '1') {
+                            orderList.goodsList.push(item)
+                        }
+                    })
+
+                    result.addressList.forEach(function(item) {
+                        if (item.isDefault) {
+
+                            orderList.addressInfo = item
+                        }
+                    })
+
+                    result.orderList.push(orderList);
+                    result.save(function(err1) {
+                        if (err1) {
+                            res.json({
+                                code: 3000,
+                                success: false,
+                                message: "用户信息获取失败，系统错误",
+                                data: err1.message
+                            })
+                        } else {
+                            res.json({
+                                code: 0,
+                                success: true,
+                                message: "用户信息获取失败，系统错误",
+                                data: result.orderList
+                            })
+                        }
+                    })
+
+                } else {
+                    res.json({
+                        code: 4000,
+                        success: false,
+                        message: "用户不存在",
+                        data: []
+                    })
+                }
+            }
+
+        })
+
+
+
+
+
+
+
+
+
+
+}
+
+exports.getOrderInfo = function(req, res, next) {
+    let userId = req.query.userId || req.cookies.userId;
+
+    Users.findOne({ userId: userId }, function(err, result) {
+        if (err) {
+            res.json({
+                code: 3000,
+                success: false,
+                message: "用户信息获取失败，系统错误",
+                data: err.message
+            })
+        } else {
+            if (result) {
+
+                result.orderList.forEach(function(item) {
+                    if (item.orderStatus === '0') {
+                        res.json({
+                            code: 0,
+                            success: false,
+                            message: "数据获取成功",
+                            data: item
+                        })
+                        return;
+                    }
+                })
+            } else {
+                res.json({
+                    code: 4000,
+                    success: false,
+                    message: "用户不存在",
+                    data: []
+                })
+            }
+        }
+    })
 }
