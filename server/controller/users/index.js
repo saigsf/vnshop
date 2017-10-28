@@ -7,7 +7,7 @@ var controller = require('./users.controller');
 var router = express.Router();
 
 // 需要权限
-router.get('/getUserList', controller.getUserList);
+router.post('/getUserList', controller.getUserList);
 router.delete('/:id', controller.destroy);
 router.put('/:id/updataUser', controller.updata);
 

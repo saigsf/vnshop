@@ -8,7 +8,7 @@ module.exports = mongoose.model("Users", new Schema({
     userPwd: String,
     Email: String,
     addressList: [{
-        addressId: { type: String, unique: true },
+        addressId: String,
         isDefault: {
             type: Boolean,
             default: false
@@ -42,7 +42,7 @@ module.exports = mongoose.model("Users", new Schema({
     }],
     orderList: [{
         addressInfo: {
-            addressId: { type: String, unique: true },
+            addressId: String,
             isDefault: Boolean,
             postCode: String,
             streetName: String,
@@ -61,7 +61,7 @@ module.exports = mongoose.model("Users", new Schema({
             productNum: Number,
             salePrice: Number
         }],
-        orderId: { type: String, unique: true },
+        orderId: String,
         orderStatus: String,
         orderTotal: Number,
         payType: String,

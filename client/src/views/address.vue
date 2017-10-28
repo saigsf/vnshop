@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav-header></nav-header>
+    <nav-header ref="child"></nav-header>
     <nav-crumbs>checkout</nav-crumbs>
     <div class="checkout-page">
   <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -167,13 +167,14 @@ export default {
     },
     methods: {
         getAddrList(){
-            this.$https.get('/users/getAddr',{
-                params:{
-                    userId:'100000077'
-                }
-            }).then(res=>{
+            this.$https.get('/users/getAddr').then(res=>{
                 // console.log(res)
-                this.addrList=res.data.data
+                if(res.data.code===0){
+                    this.addrList=res.data.data
+                }else{
+                    this.$refs.child.isError()
+                }
+                
             })
         },
         delAddr(item){
@@ -184,22 +185,30 @@ export default {
             this.delAddrConfirm=false
             this.$https.get('/users/delAddr',{
                 params:{
-                    userId:'100000077',
                     addressId:this.addressId
                 }
             }).then(res=>{
-                this.getAddrList()
+              if(res.data.code===0){
+                  this.getAddrList()
+              }else{
+                  this.$refs.child.isError()
+              }
+                
             })
         },
         setDefault(item){
             item.isDefault=true;
             this.$https.get('/users/setDefault',{
                 params:{
-                    userId:'100000077',
                     addressId:item.addressId
                 }
             }).then(res=>{
-                this.getAddrList()
+                if(res.data.code===0){
+                    this.getAddrList()
+                }else{
+                    this.$refs.child.isError()
+                }
+                
             })
         }
 

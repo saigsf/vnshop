@@ -21,10 +21,9 @@
 
                             <div class="inputbg">
                                 <label class="labelbox">
-                                    <input type="text" v-model="userName" name="un" id="username" minlength="3" @blur="is_registered();" placeholder="用户名">
+                                    <input type="text" v-model="userName" name="un" id="username"  @blur="is_registered();" placeholder="用户名,2-15位数字字母_汉字">
                                 </label>
-                                <span class="t_text">用户名</span>
-                                <span class="error_icon"></span>
+                                <span class="error_icon" v-for="(item,idx) in nameStatus" :key="idx" v-if="item.name==nameConfirm" :class="{'green':item.name=='ok','red':item.name!='ok'}" >{{item.tips}} </span>
                             </div>
                             <div class="err_tip" id="username_notice"> <em></em> </div>
 
@@ -33,26 +32,23 @@
                                     <input v-model="email" type="text" id="email" @blur="checkEmail();" placeholder="email">
                                     
                                 </label>
-                                <span class="t_text">email</span>
-                                <span class="error_icon"></span>
+                                <span class="error_icon" v-for="(item,idx) in emailStatus" :key="idx" v-if="item.name==emailConfirm" :class="{'green':item.name=='ok','red':item.name!='ok'}" >{{item.tips}} </span>
                             </div>
                             <div class="err_tip" id="email_notice"><em></em> </div>
 
                             <div class="inputbg">
                                 <label class="labelbox">
-                                    <input type="password" v-model="userPwd" id="password1"  @blur="check_password();" placeholder="密码">
+                                    <input type="password" v-model="userPwd" id="password1"  @blur="check_password();" placeholder="密码,6-16位数字字母组合">
                                 </label>
-                                <span class="t_text">密码</span>
-                                <span class="error_icon"></span>
+                                <span class="error_icon" v-for="(item,idx) in userPwdStatus" :key="idx" v-if="item.name==userPwdConfirm" :class="{'green':item.name=='ok','red':item.name!='ok'}" >{{item.tips}} </span>
                             </div>
                             <div class="err_tip" id="password_notice"> <em></em> </div>
 
                             <div class="inputbg">
                                 <label class="labelbox">
-                                    <input v-model="confirm_password" type="password" id="conform_password"  @blur="check_conform_password();" placeholder="确认密码">
+                                    <input v-model="rePwd" type="password" id="conform_password"  @blur="check_conform_password();" placeholder="确认密码">
                                 </label>
-                                <span class="t_text">确认密码</span>
-                                <span class="error_icon"></span>
+                                <span class="error_icon" v-for="(item,idx) in rePwdStatus" :key="idx" v-if="item.name==rePwdConfirm" :class="{'green':item.name=='ok','red':item.name!='ok'}" >{{item.tips}} </span>
                             </div>
                             <div class="err_tip" id="conform_password_notice"> <em></em> </div>
 
@@ -79,7 +75,10 @@
                                 <input type="hidden" name="back_act" value="">
                                 <input name="Submit" type="button" value="同意协议并注册" class="btn332 btn_reg_1 submit-step" @click="okRegister" >
                             </div>
-                            <div class="trig">已有账号? <a href="http://mi.shudong.wang/user.php" class="trigger-box">点击登录</a> </div>
+                            <div class="trig">已有账号? 
+                                <router-link  to="/login" class="trigger-box">点击登录</router-link> 
+                                
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -97,38 +96,138 @@
 
 <script>
 import "../../static/css/login.css";
+import {encode} from '../util/util.js'
 export default {
   name: "Register",
   data() {
     return {
         userName:'',
+        nameConfirm:'',
+        nameStatus:[{
+            name: "default",
+            tips: ""
+        }, {
+            name: "required",
+            tips: "账号不能为空！"
+        }, {
+            name: "pattern",
+            tips: "2-15位数字字母_汉字"
+        }, {
+            name: "repeat",
+            tips: "用户名已存在"
+        }, {
+            name: "ok",
+            tips: "√"
+        }],
+        email:'',
+        emailConfirm:'',
+        emailStatus:[{
+            name: "default",
+            tips: ""
+        }, {
+            name: "required",
+            tips: "邮箱不能为空！"
+        }, {
+            name: "pattern",
+            tips: "邮箱格式不合法"
+        },{
+            name: "ok",
+            tips: "√"
+        }],
         userPwd:'',
-        confirm_password:'',
-        email:''
+        userPwdConfirm:'',
+        userPwdStatus:[{
+            name: "default",
+            tips: ""
+        }, {
+            name: "required",
+            tips: "密码不能为空！"
+        }, {
+            name: "pattern",
+            tips: "密码不合法，6-16位数字字母组合"
+        },{
+            name: "ok",
+            tips: "√"
+        }],
+        rePwd:'',
+        rePwdConfirm:'',
+        rePwdStatus:[{
+            name: "default",
+            tips: ""
+        }, {
+            name: "required",
+            tips: "密码不能为空！"
+        }, {
+            name: "equal",
+            tips: "密码不一致"
+        },{
+            name: "ok",
+            tips: "√"
+        }],
+        
     };
   },
   methods:{
       is_registered(){
-          console.log("用戶")
+        var userName_REGEXP = /^[(\u4e00-\u9fa5)0-9a-zA-Z\_\s@]+$/;
+        this.$https.post('/users/getUserList',{userName:this.userName}).then((res)=>{
+                    if(res.data.data!=0){
+                        this.nameConfirm='repeat'
+                    }else if(!this.userName){
+                        this.nameConfirm='required'
+                    }else if(!userName_REGEXP.test(this.userName)){
+                        this.nameConfirm='pattern'
+                    }else{
+                        this.nameConfirm='ok'
+                    }
+                    
+                })
+    
       },
       check_password(){
-          console.log("密碼")
+        var userPwd_REGEXP = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+        if(!this.userPwd){
+            this.userPwdConfirm='required'
+        }else if(!userPwd_REGEXP.test(this.userPwd)){
+            this.userPwdConfirm='pattern'
+        }else{
+            this.userPwdConfirm='ok'
+        }
       },
       check_conform_password(){
-          console.log("確認密碼")
+        if(!this.rePwd){
+            this.rePwdConfirm='required'
+        }else if(this.rePwd!==this.userPwd){
+            this.rePwdConfirm='equal'
+        }else{
+            this.rePwdConfirm='ok'
+        }
       },
       
       checkEmail(){
-          console.log("郵箱")
+        var EMAIL_REGEXP = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+        if(!this.email){
+            this.emailConfirm='required'
+        }else if(!EMAIL_REGEXP.test(this.email)){
+            this.emailConfirm='pattern'
+        }else{
+            this.emailConfirm='ok'
+        }
       },
       okRegister(){
           this.$https.post('/users/register',{
               userName:this.userName,
-              userPwd:this.userPwd,
+              userPwd:encode(this.userPwd),
               email:this.email
           }).then(res=>{
             console.log(res)
-        })
+            if(res.data.code==0){
+                this.$router.push({path:'/login'})
+            }
+            
+          },err=>{
+              console.log(err)
+          })
       }
   }
 };
@@ -138,5 +237,19 @@ export default {
 <style scoped>
 input {
   border: none;
+}
+.red{
+    display: block;
+    color: red;
+}
+.green{
+    display: inline-block;
+    background-color: green;
+    color: #fff;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px
 }
 </style>

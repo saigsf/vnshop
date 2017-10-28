@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav-header></nav-header>
+    <nav-header ref="child"></nav-header>
     <nav-crumbs>添加地址</nav-crumbs>
     <div class="cle cart_main">
         
@@ -166,14 +166,13 @@ export default {
     data () {
         return {
             address :{
-                isDefault: false,
-                postCode: '710000',
-                streetName: '陕西省西安市碑林区长安北路111号1401室',
-                tel: '18659131413',
-                mobile:'18659131413',
-                userName: '高世飞',
-                Email:'123@wqe.com',
-                sign_building:'华夏银行',
+                postCode: '',
+                streetName: '',
+                tel: '',
+                mobile:'',
+                userName: '',
+                Email:'',
+                sign_building:'',
                 best_time:'',
                 country:'',
                 province:'',
@@ -190,11 +189,15 @@ export default {
         add(){
             // console.log(this.address)
             this.$https.post('/users/addAddr',{
-                userId:'100000077',
                 address:this.address
             }).then(res=>{
                 // console.log(res)
-                this.$router.push({path:'/address'})
+                if(res.data.code===0){
+                     this.$router.push({path:'/address'})
+                }else{
+                    this.$refs.child.isError()
+                }
+               
             })
         }
 

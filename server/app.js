@@ -47,9 +47,12 @@ app.use(function(req, res, next) {
     } else {
         if (req.path == '/users/register' ||
             req.path == '/goods/list' ||
+            req.path == '/goods/getGoods' ||
             req.path == '/users/checkLogin' ||
+            req.path == '/users/getCartList' ||
             req.path == '/users/login' ||
-            req.path == '/users/delLogin') {
+            req.path == '/users/delLogin' ||
+            req.path == '/users/getUserList') {
             next();
         } else {
             // 如果没有token，则返回错误

@@ -29,7 +29,7 @@
                 <div class="accessory-list-wrap">
                     <div class="accessory-list col-4">
                         <ul>
-                            <li v-for="item in goodsList" :key="item.id" >
+                            <li v-for="item in goodsList" :key="item.id" @click="toDetail(item)">
                                 <div class="pic">
                                     <a href="#"><img v-lazy="'static/img/'+item.productImage" alt=""></a>
                                 </div>
@@ -163,19 +163,24 @@
             addCart(item){
                 this.$https.post('/users/checkLogin')
                 .then((res)=>{
-                    if(res.data.code===3000){
+                    if(res.data.code===2000){
                         this.isLoginConfirm=true;
                        
                         this.productId=item.productId
-                    }else{
+                    }else if(res.data.code===0){
                         this.$https.post('/users/addCart',{
-                            userId:'100000077',
                             productId:item.productId,
                             productNum:1
                         }).then((res)=>{
-                            console.log(res)
-                            this.isAddConfirm=true
+                            if(res.data.code===0){
+                                this.isAddConfirm=true
+                            }else{
+                                this.$refs.child.isError()
+                            }
+                            
                         })
+                    }else{
+                        this.$refs.child.isError()
                     }
                 })
                 
@@ -187,6 +192,9 @@
             toCart(){
                 this.isAddConfirm=false;
                 this.$router.push({path:'/cart'})
+            },
+            toDetail(item){
+                this.$router.push({path:'/detail',query:{productId:item.productId}})
             }
 
         }

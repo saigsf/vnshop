@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav-header></nav-header>
+        <nav-header ref="child"></nav-header>
         <nav-crumbs>购物车</nav-crumbs>
         <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
@@ -175,25 +175,34 @@ export default {
             isAll:false,
             isDelConfirm:false,
             productId:'',
-            numConfirm:false
+            numConfirm:false,
+            noGoods:false
 
         }
     },
     created () {
         this.getCartList();
-        
-        
     },
     // updated () {
     //     this.getTotalPrice()
     // },
     methods: {
         getCartList(){
-            this.$https.post('/users/getCartList',{userId:'100000077'})
+            this.$https.post('/users/getCartList')
             .then((res)=>{ 
-                this.cartList=res.data.data;
-                this.isCheckAll();
-                this.getTotalPrice();
+                if(res.data.code===0){
+                    if(res.data.data.length===0){
+                        this.noGoods=true;
+                    }else{
+                        // this.$refs.child.checkLogin()
+                        this.cartList=res.data.data;
+                        this.isCheckAll();
+                        this.getTotalPrice(); 
+                    }
+                }else{
+                    this.$refs.child.isError()
+                }
+                
             })
         },
         editCart(checked,item){
@@ -220,7 +229,13 @@ export default {
                     userId:'100000077',
                     productId:item.productId,
                     productNum:item.productNum
-                }).then((res)=>{})
+                }).then((res)=>{
+                    if(res.data.code===0){
+                    
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                })
         },
         deleteCart(item){
             this.isDelConfirm=true;
@@ -231,8 +246,13 @@ export default {
                     userId:'100000077',
                     productId:this.productId
                 }).then((res)=>{
-                    this.isDelConfirm=false;
-                    this.getCartList();
+                    if(res.data.code===0){
+                        this.isDelConfirm=false;
+                        this.getCartList();
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                    
                 })
         },
         checkAll(){
@@ -279,7 +299,13 @@ export default {
                     userId:'100000077',
                     productId:item.productId,
                     checked : item.checked
-                }).then((res)=>{})
+                }).then((res)=>{
+                    if(res.data.code===0){
+                    
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                })
         },
         toOrder(){
             if(this.totalPrice>0){

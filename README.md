@@ -506,4 +506,19 @@ Error: Can't set headers after they are sent.
 
 ```
 [解决方法](http://blog.csdn.net/qq_29380855/article/details/50692528)
+
+### 错误1
+```
+errmsg:"E11000 duplicate key error collection: shop.users index: addressList.addressId_1 dup key: { : null }"
+```
+#### 解决方法
+先运行 mongo 到 mongodb shell 命令行模式下,执行以下命令：
+```
+db.users.getIndexes(); //查看所有索引
+db.users.dropIndex({"addressId":"1"}); 
+```
+[然后未解决。。。。。。。](https://stackoverflow.com/questions/36811174/errmsg-e11000-duplicate-key-error-collection-reduxpress-users-index-addres)
+
+
+## 接口文档说明
 待续····

@@ -9,7 +9,7 @@ var Goods = require('../../modules/goods');
 // var ccap = require('ccap')();
 // var config = require('../../config/env')
 
-
+// 获取商品列表
 exports.getGoodsList = function(req, res, next) {
     // console.log(req.param('sort'))
 
@@ -72,4 +72,33 @@ exports.getGoodsList = function(req, res, next) {
             }
         })
 
+}
+
+
+// 获取单个商品
+exports.getGoods = function(req, res, next) {
+    var productId = req.param('productId');
+    Goods.findOne({ productId: productId }, function(err, result) {
+        if (err) {
+            return res.json({
+                code: 3001,
+                msg: "商品信息获取失败，数据库语句错误",
+                data: err
+            });
+        } else {
+            if (result) {
+                return res.json({
+                    code: 0,
+                    msg: "商品信息获取成功",
+                    data: result
+                });
+            } else {
+                return res.json({
+                    code: 2002,
+                    msg: "商品不存在",
+                    data: {}
+                });
+            }
+        }
+    })
 }

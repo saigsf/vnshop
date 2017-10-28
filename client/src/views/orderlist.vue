@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav-header></nav-header>
+    <nav-header ref="child"></nav-header>
     <nav-crumbs>orderInfo</nav-crumbs>
     <div class="page-main">
         <div class="container clearfix">
@@ -382,34 +382,40 @@ export default {
     },
     methods:{
         getCheckedGoods(){
-            this.$https.post('/users/getCartList',{
-                    userId:'100000077'
-                }).then((res)=>{
-                    console.log(res)
+            this.$https.post('/users/getCartList',).then((res)=>{
+                console.log(res)
+                if(res.data.code===0){
                     this.goodsList=res.data.data
                     this.getTotal();
-
-                })
+                }else{
+                    this.$refs.child.isError()
+                }
+            })
         },
         getAddrList(){
-            let addressId =this.$router.history.current.query.addressId
+            let addressId =this.$route.query.addressId
             
             this.$https.get('/users/getAddr',{
                 params:{
-                    userId:'100000077',
                     addressId:addressId
                 }
             }).then(result=>{
-                let res=result.data.data;
-                if(!addressId){
-                    res.forEach((item)=> {
-                        if(item.isDefault){
-                            this.address=item
-                        }
-                    });
+                if(result.data.code===0){
+                    var res=result.data.data;
+                    if(!addressId){
+                        res.forEach((item)=> {
+                            if(item.isDefault){
+                                this.address=item
+                            }
+                        });
+                    }else{
+                        this.address=res;
+                    }
                 }else{
-                    this.address=res;
+                    this.$refs.child.isError()
                 }
+                
+                
             })
         },
         getTotal(){
@@ -440,15 +446,12 @@ export default {
                 this.shopMethodConfirm=true;
             }else{
                 this.$https.post('/users/addOrder',{
-                    userId:'100000077',
                     addressId :this.address.addressId,
                     orderTotal :this.totalPrice,
                     payType :this.payType,
                     shopMethod : this.shopMethod,
                 }).then((res)=>{
-                    // console.log(res)
-                    if(res.data.code==0)
-                    this.$router.push({path:'/orderDone',query:{orderId:res.data.data.orderId}})
+                    if(res.data.code==0)this.$router.push({path:'/orderDone',query:{orderId:res.data.data.orderId}})
 
                 })
             }

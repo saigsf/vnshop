@@ -65,12 +65,13 @@ export default {
             this.orderId=this.$route.query.orderId
             this.$https.get('/users/getOrderInfo',{
                 params:{
-                    userId:'100000077',
                     orderId:this.orderId
                     }
                 }).then((res)=>{
-                    this.msg=res.data.data
-                    console.log(res)
+                    if(res.data.code===0){
+                       this.msg=res.data.data 
+                    }
+                    
                 })
         }
     }

@@ -1,4 +1,4 @@
 module.exports = {
-    'secret': 'saigsf',
+    'secrets': 'saigsf',
     'database': 'mongodb://127.0.0.1'
 };

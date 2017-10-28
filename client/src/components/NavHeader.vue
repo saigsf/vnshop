@@ -327,6 +327,14 @@
                 <input class="btn btn-gray" type="button" value="确定" @click="toLogin">
             </a>
         </modal>
+        <modal :mdShow="systemError" >
+            <div slot="message" class="confirm-tips" >系统错误，请返回首页，并联系网站管理人员：q3185328602</div>
+            <button slot="close" class="md-close" @click="systemError=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="systemError=false" >
+                <input class="btn btn-gray" type="button" value="返回首页" @click="toHome">
+            </a>
+        </modal>
     </div>
 
 
@@ -350,7 +358,8 @@ export default {
             isLogin:false,
             topName:'',
             toCartConfirm:false,
-            cartNum:0
+            cartNum:0,
+            systemError:false
         }
     },
     created(){
@@ -385,28 +394,39 @@ export default {
                         this.cartNum=res.data.data.length
                     })
                 }else{
-                    // this.isLogin=true
+                    this.systemError=true
                 }
             })
         },
         logOut(){
             this.$https.post('/users/delLogin').then(res=>{
+                  
                 this.topName=''
                 this.$router.push({path:'/'})
+                
             })
         },
         toCart(){
             this.$https.post('/users/checkLogin').then(res=>{
                 if(res.data.code===0){
                     this.$router.push({path:'/cart'})
-                }else{
+                }else if(res.data.code===2000){
                     this.toCartConfirm=true
+                }else{
+                    this.systemError=true
                 }
             })
         },
         toLogin(){
             this.toCartConfirm=false;
             this.isLogin=true;
+        },
+        toHome(){
+            this.systemError=false;
+            this.$router.push({path:'/'})
+        },
+        isError(){
+            this.systemError=true
         }
     }
 }
