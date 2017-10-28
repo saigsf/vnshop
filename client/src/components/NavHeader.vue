@@ -1,13 +1,16 @@
 <template>
-<div class="site-header" style="clear:both;">
+    <div>
+    <div class="site-header" style="clear:both;">
         <div class="container">
             <div class="header-logo">
-                <a href="index.php" title="格美官网"><img src="/static/img/vn-logo.png" /></a>
+                <!-- <a href="index.php" title="格美官网"><img src="/static/img/vn-logo.png" /></a> -->
+                <router-link to="/"  title="格美官网"><img src="/static/img/vn-logo.png" /></router-link>
             </div>
             <div class="header-nav">
                 <ul class="nav-list">
                     <li class="nav-category">
-                        <a class="btn-category-list" href="catalog.php" style="display:none;">全部商品分类</a>
+                        <!-- <a class="btn-category-list" href="catalog.php" >全部商品分类</a> -->
+                        <router-link to="/goodsList" class="btn-category-list" >全部商品分类</router-link>
                     </li>
                     <li class="nav-item">
                         <a class="link" href="category.php?id=76"><span>购买电视与平板</span></a>
@@ -268,36 +271,164 @@
             </div>
             <!-- <div class="container-user"> -->
             <div class="topbar-cart" id="ECS_CARTINFO">
-                <router-link to="/cart" class="cart-mini ">
+                <a @click="toCart" class="cart-mini ">
                     <i class="iconfont">&#xe60c;</i> 购物车
-                    <span class="mini-cart-num J_cartNum" id="hd_cartnum">(0)</span>
-                </router-link>
+                    <span class="mini-cart-num J_cartNum" id="hd_cartnum">({{cartNum}})</span>
+                </a>
             </div>
             <div class="topbar-info J_userInfo" id="ECS_MEMBERZONE">
-                <!-- <a class="link" href="user.php" rel="nofollow">登录</a> -->
-                <router-link class="link" to="/login" rel="nofollow" >登录</router-link>
-                <span class="sep">|</span>
-                <!-- <a class="link" href="user.php?act=register" rel="nofollow">注册</a> -->
-                <router-link class="link" to="/register" rel="nofollow" >注册</router-link>
+                
+                <a class="link" rel="nofollow" v-if="!topName" @click="isLogin=true" >登录</a>
+                <a class="link" rel="nofollow" v-else >
+                    <i class="fa fa-user"></i>
+                    {{topName}}
+                </a>
+                <!-- <router-link class="link" to="/login" rel="nofollow" >登录</router-link> -->
+                <span class="sep"   >|</span>
+                <a class="link"  v-if="topName" @click="logOut" rel="nofollow">退出</a>
+                <router-link class="link" to="/register"  v-if="!topName" rel="nofollow" >注册</router-link>
             </div>
             <!-- </div> -->
         </div>
         <div id="J_navMenu" class="header-nav-menu" style="display: none;">
             <div class="container"></div>
         </div>
+
+
+        
+
     </div>
+    <!-- 登录框 -->
+        <modal :mdShow="isLogin" >
+            <div slot="message" class="md-tit" >
+            <h2>登录</h2> 
+            </div>
+            <button slot="close" class="md-close" @click="isLogin=false" >Close</button>
+            <div slot="btnGroup" class="regbox confirm-tips">
+                <ul>
+                    <li class="law">
+                        <input type="text" tabindex="1"   v-model="userName" placeholder="User Name"  class="btn-block">
+                    </li>
+                    <li class="law">
+                        <i class="icon IconPwd"></i>
+                        <input type="password" tabindex="2"  v-model="userPwd" placeholder="Password" class="btn-block">
+                    </li>
+                </ul>
+                <div class="law">
+                    <a href="javascript:;" class="btn btn-primary btn-block" @click="login" >登录</a>
+                </div>
+            </div>
+        </modal>
+        <modal :mdShow="toCartConfirm" >
+            <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
+            <button slot="close" class="md-close" @click="toCartConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="toCartConfirm=false" >
+                <input class="btn btn-gray" type="button" value="确定" @click="toLogin">
+            </a>
+        </modal>
+        <modal :mdShow="systemError" >
+            <div slot="message" class="confirm-tips" >系统错误，请返回首页，并联系网站管理人员：q3185328602</div>
+            <button slot="close" class="md-close" @click="systemError=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="systemError=false" >
+                <input class="btn btn-gray" type="button" value="返回首页" @click="toHome">
+            </a>
+        </modal>
+    </div>
+
 
 
 </template>
 
 <script>
+import '../../static/css/base.css'
+import Modal from '../components/Modal'
+import { delCookie, getCookie } from '@/util/util'
 export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+    name: 'HelloWorld',
+    props: ['isNowLogin'],
+    components:{
+        Modal
+    },
+    data () {
+        return {
+            userName:'',
+            userPwd:'',
+            isLogin:false,
+            topName:'',
+            toCartConfirm:false,
+            cartNum:0,
+            systemError:false
+        }
+    },
+    created(){
+        // this.searchCookie();
+        this.checkLogin()
+    },
+    
+    methods:{
+        login(){
+            this.$https.post('/users/login',{
+                userName:this.userName,
+                userPwd:this.userPwd
+            }).then(res=>{
+                console.log(res)
+                this.isLogin=false;
+                this.topName=res.data.data.userName
+                this.$https.post('/users/getCartList').then(res=>{
+                        this.cartNum=res.data.data.length
+                    })
+            })
+        },
+        searchCookie(){
+            if(getCookie('userName')){
+                this.topName=getCookie('userName')
+            }
+        },
+        checkLogin(){
+            this.$https.post('/users/checkLogin').then(res=>{
+                if(res.data.code===0){
+                    this.topName=res.data.data
+                    this.$https.post('/users/getCartList').then(res=>{
+                        this.cartNum=res.data.data.length
+                    })
+                }else{
+                    this.systemError=true
+                }
+            })
+        },
+        logOut(){
+            this.$https.post('/users/delLogin').then(res=>{
+                  
+                this.topName=''
+                this.$router.push({path:'/'})
+                
+            })
+        },
+        toCart(){
+            this.$https.post('/users/checkLogin').then(res=>{
+                if(res.data.code===0){
+                    this.$router.push({path:'/cart'})
+                }else if(res.data.code===2000){
+                    this.toCartConfirm=true
+                }else{
+                    this.systemError=true
+                }
+            })
+        },
+        toLogin(){
+            this.toCartConfirm=false;
+            this.isLogin=true;
+        },
+        toHome(){
+            this.systemError=false;
+            this.$router.push({path:'/'})
+        },
+        isError(){
+            this.systemError=true
+        }
     }
-  }
 }
 </script>
 

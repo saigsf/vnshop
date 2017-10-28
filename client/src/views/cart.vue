@@ -1,7 +1,7 @@
 <template>
     <div>
-        <nav-header></nav-header>
-        <!-- <nav-crumbs></nav-crumbs> -->
+        <nav-header ref="child"></nav-header>
+        <nav-crumbs>购物车</nav-crumbs>
         <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <symbol id="icon-add" viewBox="0 0 32 32">
@@ -59,7 +59,7 @@
                             <li v-for="(item,idx) in cartList" :key="idx">
                                 <div class="cart-tab-1">
                                     <div class="cart-item-check">
-                                        <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
+                                        <a href="javascipt:;" class="checkbox-btn item-check-btn" :class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
                                             <svg class="icon icon-ok">
                                                 <use xlink:href="#icon-ok"></use>
                                             </svg>
@@ -105,11 +105,11 @@
                 <div class="cart-foot-wrap">
                     <div class="cart-foot-inner">
                         <div class="cart-foot-l">
-                            <div class="item-all-check">
-                                <a href="javascipt:;">
-                                    <span class="checkbox-btn item-check-btn">
-                        <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
-                    </span>
+                            <div class="item-all-check"  @click="checkAll"  >
+                                <a href="javascipt:;" >
+                                    <span class="checkbox-btn item-check-btn" :class="{'check':isAll}">
+                                        <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
+                                    </span>
                                     <span>Select all</span>
                                 </a>
                             </div>
@@ -118,8 +118,8 @@
                             <div class="item-total">
                                 Item total: <span class="total-price">{{totalPrice}}</span>
                             </div>
-                            <div class="btn-wrap">
-                                <a class="btn btn--red">Checkout</a>
+                            <div class="btn-wrap" style="height:54px" >
+                                <a @click="toOrder" class="btn btn--red" style="height:54px ;line-height:54px" >Checkout</a>
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,22 @@
             </div>
         </div>
         <nav-footer></nav-footer>
+        <modal :mdShow="isDelConfirm" >
+            <div slot="message" class="confirm-tips" >您确定要删除该商品吗？</div>
+            <button slot="close" class="md-close" @click="isDelConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="isDelConfirm=false" >
+                <input class="btn btn-gray" type="button" value="确定" @click="deleteCartConfirm">
+            </a>
+        </modal>
+        <modal :mdShow="numConfirm" >
+            <div slot="message" class="confirm-tips" >亲！至少买一件撒~</div>
+            <button slot="close" class="md-close" @click="numConfirm=false" >Close</button>
+            <a  slot="btnGroup" class="btn-wrap" >
+                <input class="btn btn-gray" type="button" value="取消" @click="numConfirm=false" >
+                <input class="btn btn-gray" type="button" value="确定" @click="numConfirm=false">
+            </a>
+        </modal>
     </div>
 </template>
 
@@ -143,59 +159,160 @@ import '../../static/css/style.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
 import NavCrumbs from '../components/NavCrumbs'
+import Modal from '../components/Modal'
 export default {
     name: 'cart',
     components:{
         NavHeader,
-        NavFooter
+        NavFooter,
+        NavCrumbs,
+        Modal
     },
     data () {
         return {
-        cartList: [],
-        totalPrice:0
+            cartList: [],
+            totalPrice:0,
+            isAll:false,
+            isDelConfirm:false,
+            productId:'',
+            numConfirm:false,
+            noGoods:false
+
         }
     },
     created () {
-        this.getCartList()
+        this.getCartList();
     },
+    // updated () {
+    //     this.getTotalPrice()
+    // },
     methods: {
         getCartList(){
-            this.$https.post('/cart/cartList',{userId:'100000077'})
-            .then((res)=>{
-                console.log(res)
-                this.cartList=res.data.data;
-                for (var i = 0; i < res.data.data.length; i++) {
-                    this.totalPrice+= res.data.data[i].productNum*res.data.data[i].salePrice;
-                    
+            this.$https.post('/users/getCartList')
+            .then((res)=>{ 
+                if(res.data.code===0){
+                    if(res.data.data.length===0){
+                        this.noGoods=true;
+                    }else{
+                        // this.$refs.child.checkLogin()
+                        this.cartList=res.data.data;
+                        this.isCheckAll();
+                        this.getTotalPrice(); 
+                    }
+                }else{
+                    this.$refs.child.isError()
                 }
-
+                
             })
         },
         editCart(checked,item){
-            console.log(checked)
-            item.checked=item.checked=='1'?'0':'1';
+            item.checked=item.checked==='1'?'0':'1';
+            // this.getTotalPrice()
+            if(item.checked==='1'){
+                this.totalPrice+=item.salePrice*item.productNum
+            }else{
+                this.totalPrice-=item.salePrice*item.productNum
+            }
+            this.updateCart(item)
+            this.isCheckAll()
         },
         changeNum(num,item){
+            item.productNum += num;
             if(item.productNum<1){
-                alert("至少买一件撒~");
+                this.numConfirm=true;
                 item.productNum=1;
-            }else{
-                item.productNum += num;
-            } 
+            }
+            if(item.checked==='1'){
+                this.totalPrice+=item.salePrice*num
+            }
+            this.$https.post('/users/updateNum',{
+                    userId:'100000077',
+                    productId:item.productId,
+                    productNum:item.productNum
+                }).then((res)=>{
+                    if(res.data.code===0){
+                    
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                })
         },
         deleteCart(item){
-            this.$https.post('/cart/deleteCart',{
-                userId:'100000077',
-                productId:item.productId
+            this.isDelConfirm=true;
+            this.productId=item.productId
+        },
+        deleteCartConfirm(){
+            this.$https.post('/users/deleteCart',{
+                    userId:'100000077',
+                    productId:this.productId
                 }).then((res)=>{
-                console.log(res)
-                this.cartList=res.data.data;
-                for (var i = 0; i < res.data.data.length; i++) {
-                    this.totalPrice+= res.data.data[i].productNum*res.data.data[i].salePrice;
+                    if(res.data.code===0){
+                        this.isDelConfirm=false;
+                        this.getCartList();
+                    }else{
+                        this.$refs.child.isError()
+                    }
                     
+                })
+        },
+        checkAll(){
+            this.isAll=!this.isAll;
+            this.cartList.forEach(function(item) {
+                if(this.isAll){
+                    item.checked='1'
+                    this.updateCart(item)
+                }else{
+                    item.checked='0'
+                    this.updateCart(item)
                 }
-
-            })
+            }, this);
+            this.getTotalPrice()
+        },
+        getTotalPrice(){
+            this.totalPrice=0
+            this.cartList.forEach(function(item) {
+                if(item.checked==='1'){
+                    
+                    this.totalPrice +=item.salePrice*item.productNum;
+                }else{
+                    this.totalPrice=0;
+                }
+            }, this);
+        },
+        isCheckAll(){
+            let num=0;
+            this.cartList.forEach(function(key) {
+                if(key.checked==='0'){
+                    this.isAll=false;
+                }else{
+                    num++;
+                }
+            }, this);
+            if(this.cartList.length===num){
+                this.isAll=true
+            }else{
+                this.isAll=false
+            }
+        },
+        updateCart(item){
+            this.$https.post('/users/updateCart',{
+                    userId:'100000077',
+                    productId:item.productId,
+                    checked : item.checked
+                }).then((res)=>{
+                    if(res.data.code===0){
+                    
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                })
+        },
+        toOrder(){
+            if(this.totalPrice>0){
+                this.$router.push({path:'/address'})
+            }else{
+                this.numConfirm=true
+            }
         }
     }
 }

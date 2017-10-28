@@ -5,11 +5,21 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+// 连接数据库 如果不自己创建 默认test数据库会自动生成
+mongoose.connect('mongodb://localhost:27017/shop');
+
+// 为这次连接绑定事件
+const db = mongoose.connection;
+db.once('error', () => console.log('Mongo connection error'));
+db.once('open', () => console.log('Mongo connection successed'));
+db.once('close', () => console.log('Mongo connection faild'));
+
+
+
 var index = require('./routes/index');
-var users = require('./routes/users');
-var goods = require('./routes/goods');
-var userInfo = require('./routes/userInfo');
-var cart = require('./routes/cart');
+// var users = require('./routes/users');
+// var goods = require('./routes/goods');
 
 
 
@@ -27,11 +37,45 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 拦截器
+app.use(function(req, res, next) {
+    //检查post的信息或者url查询参数或者头信息
+    var userId = req.cookies.userId;
+    // 解析 token
+    if (userId) {
+        next();
+    } else {
+        if (req.path == '/users/register' ||
+            req.path == '/goods/list' ||
+            req.path == '/goods/getGoods' ||
+            req.path == '/users/checkLogin' ||
+            req.path == '/users/getCartList' ||
+            req.path == '/users/login' ||
+            req.path == '/users/delLogin' ||
+            req.path == '/users/getUserList') {
+            next();
+        } else {
+            // 如果没有token，则返回错误
+            return res.status(403).json({
+                success: false,
+                message: '没有登录'
+            });
+        }
+
+
+    }
+});
+
+
 app.use('/', index);
-app.use('/users', users);
-app.use('/goods', goods);
-app.use('/userInfo', userInfo);
-app.use('/cart', cart);
+// app.use('/goods', goods);
+// app.use('/order', order);
+
+
+
+// require('./config/express')(app);
+require('./routers')(app);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

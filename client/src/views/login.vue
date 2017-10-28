@@ -11,11 +11,11 @@
                     <form name="formLogin" action="http://mi.shudong.wang/user.php" method="post" onsubmit="return userLogin()">
                         <div class="shake-area">
                             <div class="enter-area">
-                                <input name="username" type="text" class="enter-item first-enter-item" placeholder="用户名" data-form-un="1505529870503.567">
+                                <input name="username" type="text" class="enter-item first-enter-item" placeholder="用户名" v-model="userName" >
                                 <i class="placeholder">用户名</i>
                             </div>
                             <div class="enter-area">
-                                <input name="password" type="password" class="enter-item last-enter-item" placeholder="密码" data-form-pw="1505529870503.567">
+                                <input name="password" type="password" class="enter-item last-enter-item" placeholder="密码" v-model="userPwd" >
                                 <i class="placeholder">密码</i>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                         </div>
                         <input type="hidden" name="act" value="act_login">
                         <input type="hidden" name="back_act" value="http://mi.shudong.wang/">
-                        <input type="submit" name="submit" class="button orange" value="立即登录" data-form-sbm="1505529870503.567">
+                        <input type="button" name="submit" class="button orange" value="立即登录" @click="login" >
                         <div class="ng-foot clearfix">
                             <div class="ng-cookie-area"><label><input type="checkbox" value="1" name="remember" id="remember" class="remember-me">请保存我这次的登录信息。</label></div>
                             <div class="ng-link-area">
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="button" href="http://mi.shudong.wang/user.php?act=register">注册格美官网账号</a>
+                        <router-link to="/register" class="button" >注册格美官网账号</router-link>
                     </form>
                 </div>
             </div>
@@ -58,12 +58,28 @@
 
 <script>
 import '../../static/css/login.css'
+import {encode } from '../util/util.js'
 export default {
   name: 'Login',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      userName:'',
+      userPwd:''
     }
+  },
+  methods:{
+
+      login(){
+          this.$https.post('/users/login',{
+              userName:this.userName,
+              userPwd:encode(this.userPwd)
+          }).then(res=>{
+              if(res.data.code===0){
+                  this.$router.push({path:'/'})
+              }
+              
+          })
+      }
   }
 }
 </script>

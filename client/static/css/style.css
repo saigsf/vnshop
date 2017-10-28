@@ -353,9 +353,9 @@ a:hover {
     width: 100%;
     padding-left: 0;
     padding-right: 0;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
 }
 
 .btn-primary {
@@ -1243,7 +1243,7 @@ a:hover {
 
 .site-header .header-logo {
     float: left;
-    width: 62px;
+    width: 160px;
     margin-top: 22px;
 }
 

@@ -117,10 +117,11 @@ router.post('/register', function(req, res, next) {
 // 登录
 router.post('/login', function(req, res, next) {
     console.log("=====get User=====");
-    var { name, password } = req.body;
+    console.log(req.body)
+    var { userName, userPwd } = req.body;
 
     Users.findOne({
-        userName: name
+        userName: userName
     }, function(err, result) {
         if (err) {
             res.json({
@@ -131,19 +132,31 @@ router.post('/login', function(req, res, next) {
             });
         }
         if (result) {
-            if (result.userPwd === md5(password)) {
+            if (result.userPwd === userPwd) {
                 var token = jwt.sign({
                     msg: "hello"
                 }, app.get('superSecret'), {
                     expiresIn: 60 * 60 * 24 // 24小时过期
                 });
+                res.cookie('userId', result.userId, {
+                    path: '/',
+                    maxAge: 1000 * 60 * 60
+                });
+                res.cookie('userName', result.userName, {
+                    path: '/',
+                    maxAge: 1000 * 60 * 60
+                });
+                res.cookie('token', token, {
+                    path: '/',
+                    maxAge: 1000 * 60 * 60
+                })
                 res.json({
                     code: 0,
                     success: true,
                     message: "登录成功！",
                     data: {
-                        name: result.name,
-                        id: result._id,
+                        userName: result.userName,
+                        userId: result.userId,
                         token: token
                     }
                 });
@@ -166,6 +179,37 @@ router.post('/login', function(req, res, next) {
     });
 });
 
+// 检查是否登录
+router.post('/checkLogin', function(req, res, next) {
+    if (req.cookies.token) {
+        res.json({
+            code: 3000,
+            success: false,
+            message: "您已登录",
+            data: req.cookies.userName
+
+        })
+    } else {
+        res.json({
+            code: 3000,
+            success: false,
+            message: "您未登录"
+        })
+    }
+})
+
+// 退出登录
+router.post('/delLogin', function(req, res, next) {
+    res.cookie('token', '', {
+        path: '/',
+        maxAge: -1
+    })
+    res.json({
+        code: 0,
+        success: true,
+        message: "您已退出"
+    })
+})
 
 
 module.exports = router;

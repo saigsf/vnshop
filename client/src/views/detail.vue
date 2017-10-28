@@ -1,6 +1,7 @@
 <template>
 <div>
-    <nav-header></nav-header>
+    <nav-header ref="child"></nav-header>
+    <nav-crumbs>detail</nav-crumbs>
     <div class="goods-detail">
         <div class="goods-detail-info  clearfix J_goodsDetail">
             <div class="container">
@@ -9,8 +10,8 @@
 
                         <div class="goods-pic-box" id="detail_img">
                             <div class="goods-big-pic">
-                                <a href="images/201507/goods_img/45_P_1437092199657.jpg" class="MagicZoomPlus" id="Zoomer" rel="hint-text: ; selectors-effect: false; selectors-class: current; zoom-distance: 60;zoom-width: 400; zoom-height: 400;">
-                                    <img alt="格美活塞耳机标准版" src="http://mi.shudong.wang/images/201507/goods_img/45_P_1437092199657.jpg">
+                                <a  class="MagicZoomPlus" id="Zoomer" rel="hint-text: ; selectors-effect: false; selectors-class: current; zoom-distance: 60;zoom-width: 400; zoom-height: 400;">
+                                    <img :alt="goods.productName" :src="'/static/img/'+goods.productImage">
                                 </a>
                             </div>
                             <div class="goods-small-pic" id="item-thumbs">
@@ -20,8 +21,8 @@
                                     <ul class="cle">
 
                                         <li class="current">
-                                            <a href="images/201507/goods_img/45_P_1437092199657.jpg" rel="zoom-id: Zoomer" rev="images/201507/goods_img/45_P_1437092199657.jpg">
-                                                <img alt="格美活塞耳机标准版" src="http://mi.shudong.wang/images/201507/thumb_img/45_thumb_P_1437092199896.jpg">
+                                            <a  rel="zoom-id: Zoomer" rev="images/201507/goods_img/45_P_1437092199657.jpg">
+                                                <img :alt="goods.productName" :src="'/static/img/'+goods.productImage">
                                             </a>
                                         </li>
 
@@ -39,14 +40,14 @@
                                 <dl class="loaded">
                                     <dt class="goods-info-head">
                                     <dl>
-                                        <dt class="goods-name">格美活塞耳机标准版</dt>
+                                        <dt class="goods-name">{{goods.productName}}</dt>
                                     <dd class="goods-phone-type">
                                         <p></p>
                                     </dd>
-                                    <del>专柜价： <em class="cancel">107<em>元</em></em></del>
+                                    <del>专柜价： <em class="cancel">{{goods.salePrice}}<em>元</em></em></del>
                                     <dd class="goods-info-head-price clearfix">
 
-                                        <span>本店价：</span> <span class="unit"> <b class="nala_price red" id="ECS_SHOPPRICE">89<em>元</em> </b> </span>
+                                        <span>本店价：</span> <span class="unit"> <b class="nala_price red" id="ECS_SHOPPRICE">{{goods.salePrice}}<em>元</em> </b> </span>
 
 
                                         <a href="javascript:;" id="membership" data-type="normal" class="membership">高级会员购买享有折扣</a>
@@ -84,7 +85,7 @@
 
                                         <ul>
 
-                                            <li> <span class="lbl">商品货号</span> <em>ECS000045</em> </li>
+                                            <li> <span class="lbl">商品货号</span> <em>{{goods.productId}}</em> </li>
 
 
 
@@ -119,16 +120,16 @@
                                             <li class="skunum_li clearfix">
                                                 <div class="ghd">数量：</div>
                                                 <div class="skunum gbd" id="skunum">
-                                                    <span class="minus" title="减少1个数量"></span>
-                                                    <input id="number" name="number" type="text" min="1" value="1" onchange="countNum(0)">
-                                                    <span class="add" title="增加1个数量"></span>&nbsp;件
+                                                    <span class="minus" title="减少1个数量" @click="changeNum(-1)" >-</span>
+                                                    <input id="number" v-model="number" name="number" type="text" min="1" >
+                                                    <span class="add" title="增加1个数量" @click="changeNum(1)" >+</span>&nbsp;件
                                                 </div>
                                             </li>
                                         </ul>
                                     </dd>
 
                                     <dd class="goods-info-head-cart">
-                                        <a href="javascript:addToCart(45)" class="btn  btn-primary goods-add-cart-btn" id="buy_btn"><i class="iconfont"></i>加入购物车</a>
+                                        <a @click="addCart" class="btn  btn-primary goods-add-cart-btn" id="buy_btn"><i class="iconfont"></i>加入购物车</a>
                                     </dd>
 
                                 </dl>
@@ -161,6 +162,22 @@
         
     </div>
     <nav-footer></nav-footer>
+    <modal :mdShow="isAddConfirm" >
+        <div slot="message" class="confirm-tips" >您已经将商品加入购物车，是要继续购物呢，还是要查看购物车</div>
+        <button slot="close" class="md-close" @click="isAddConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="继续购物" @click="isAddConfirm=false" >
+            <input class="btn btn-gray" type="button" value="查看购物车" @click="toCart">
+        </a>
+    </modal>
+    <modal :mdShow="isLoginConfirm" >
+        <div slot="message" class="confirm-tips" >您还没有登录，亲登录先~</div>
+        <button slot="close" class="md-close" @click="isLoginConfirm=false" >Close</button>
+        <a  slot="btnGroup" class="btn-wrap" >
+            <input class="btn btn-gray" type="button" value="取消" @click="isLoginConfirm=false" >
+            <input class="btn btn-gray" type="button" value="确定" @click="addCartConfirm">
+        </a>
+    </modal>
 </div>
 </template>
 
@@ -169,16 +186,80 @@ import '../../static/css/index.css'
 import '../../static/css/goods.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
+import NavCrumbs from '../components/NavCrumbs'
+import Modal from '../components/Modal'
 export default {
   name: 'detail',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+        goods:{},
+        number:1,
+        productId:'',
+        isAddConfirm:false,
+        isLoginConfirm:false,
     }
   },
   components: {
       NavHeader,
-      NavFooter
+      NavFooter,
+      NavCrumbs,
+        Modal
+  },
+  created(){
+    this.getGood()
+  },
+  methods: {
+        getGood(){
+            this.productId=this.$route.query.productId;
+            this.$https.get("/goods/getGoods",{params:{productId:this.productId}})
+                .then(res=>{
+                    if(res.data.code===0){
+                        this.goods=res.data.data
+                    }else{
+                        
+                        this.$refs.child.isError()
+                    }
+                    
+            })
+        },
+        changeNum(num){
+            this.number+=num;
+            if(this.number<1){
+                this.number=1
+            }
+        },
+        addCart(){
+            this.$https.post('/users/checkLogin')
+                .then((res)=>{
+                    if(res.data.code===2000){
+                        this.isLoginConfirm=true;
+                    }else if(res.data.code===0){
+                        this.$https.post('/users/addCart',{
+                            productId:this.productId,
+                            productNum:this.number
+                        }).then((res)=>{
+                            if(res.data.code===0){
+                                this.isAddConfirm=true
+                            }else{
+                                this.$refs.child.isError()
+                            }
+                            
+                        })
+                    }else{
+                        this.$refs.child.isError()
+                    }
+                })
+                
+            },
+            addCartConfirm(){
+                this.isLoginConfirm=false;
+                this.$refs.child.toLogin()
+            },
+            toCart(){
+                this.isAddConfirm=false;
+                this.$router.push({path:'/cart'})
+            },
+
   }
 }
 </script>
@@ -186,83 +267,83 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-                                            #choose {
-                                                margin: 0;
-                                            }
-                                            
-                                            #choose li {
-                                                overflow: hidden;
-                                                padding-bottom: 20px;
-                                            }
-                                            
-                                            #choose .dt {
-                                                width: 72px;
-                                                text-align: left;
-                                                float: left;
-                                                padding: 6px 0 0;
-                                            }
-                                            
-                                            #choose .dd {
-                                                overflow: hidden;
-                                            }
-                                            
-                                            #choose .dd .item {
-                                                float: left;
-                                                margin: 2px 8px 2px 0;
-                                                position: relative;
-                                            }
-                                            
-                                            #choose .dd .item a {
-                                                border: 1px solid #ccc;
-                                                padding: 4px 6px;
-                                                float: left;
-                                            }
-                                            
-                                            #choose .dd .item a span {
-                                                padding: 0 3px;
-                                                line-height: 30px;
-                                            }
-                                            
-                                            #choose .dd .item a img {
-                                                width: 30px;
-                                                height: 30px;
-                                            }
-                                            
-                                            #choose .dd .item b {
-                                                width: 12px;
-                                                height: 12px;
-                                                /* background: url(themes/xiaomi/images/gou.png) no-repeat; */
-                                                position: absolute;
-                                                bottom: 1px;
-                                                right: 1px;
-                                                overflow: hidden;
-                                                display: none;
-                                            }
-                                            
-                                            #choose .dd .item.selected a {
-                                                border-width: 2px;
-                                                border-color: #e4393c;
-                                                padding: 3px 5px;
-                                            }
-                                            
-                                            #choose .dd .item.selected b {
-                                                display: block;
-                                            }
-                                            
-                                            #choose li.GeneralAttrImg .dt {
-                                                padding-top: 10px;
-                                            }
-                                            
-                                            #choose li.GeneralAttrImg .dd .item a {
-                                                padding: 1px;
-                                            }
-                                            
-                                            #choose li.GeneralAttrImg .dd .item a img {
-                                                margin: 1px;
-                                            }
-                                            
-                                            #choose li.GeneralAttrImg .dd .item.selected a {
-                                                padding: 0;
-                                            }
+#choose {
+    margin: 0;
+}
+
+#choose li {
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+#choose .dt {
+    width: 72px;
+    text-align: left;
+    float: left;
+    padding: 6px 0 0;
+}
+
+#choose .dd {
+    overflow: hidden;
+}
+
+#choose .dd .item {
+    float: left;
+    margin: 2px 8px 2px 0;
+    position: relative;
+}
+
+#choose .dd .item a {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    float: left;
+}
+
+#choose .dd .item a span {
+    padding: 0 3px;
+    line-height: 30px;
+}
+
+#choose .dd .item a img {
+    width: 30px;
+    height: 30px;
+}
+
+#choose .dd .item b {
+    width: 12px;
+    height: 12px;
+    /* background: url(themes/xiaomi/images/gou.png) no-repeat; */
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    overflow: hidden;
+    display: none;
+}
+
+#choose .dd .item.selected a {
+    border-width: 2px;
+    border-color: #e4393c;
+    padding: 3px 5px;
+}
+
+#choose .dd .item.selected b {
+    display: block;
+}
+
+#choose li.GeneralAttrImg .dt {
+    padding-top: 10px;
+}
+
+#choose li.GeneralAttrImg .dd .item a {
+    padding: 1px;
+}
+
+#choose li.GeneralAttrImg .dd .item a img {
+    margin: 1px;
+}
+
+#choose li.GeneralAttrImg .dd .item.selected a {
+    padding: 0;
+}
                                         
 </style>

@@ -3,16 +3,31 @@ var Schema = mongoose.Schema;
 
 // 使用 module.exports 导出 模块
 module.exports = mongoose.model("Users", new Schema({
-    userId: String,
-    userName: String,
+    userId: { type: String, unique: true },
+    userName: { type: String, unique: true },
     userPwd: String,
+    Email: String,
     addressList: [{
         addressId: String,
-        isDefault: Boolean,
+        isDefault: {
+            type: Boolean,
+            default: false
+        },
         postCode: String,
         streetName: String,
         tel: String,
-        userName: String
+        userName: String,
+        mobile: String,
+        Email: String,
+        sign_building: String,
+        best_time: {
+            type: Date,
+            default: Date.now
+        },
+        country: String,
+        province: String,
+        city: String,
+        district: String
     }],
     cartList: [{
         checked: {
@@ -48,6 +63,8 @@ module.exports = mongoose.model("Users", new Schema({
         }],
         orderId: String,
         orderStatus: String,
-        orderTotal: Number
+        orderTotal: Number,
+        payType: String,
+        shopMethod: String
     }]
 }))
