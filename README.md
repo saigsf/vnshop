@@ -522,3 +522,141 @@ db.users.dropIndex({"addressId":"1"});
 
 ## 接口文档说明
 待续····
+## 服务器配置
+### 购买服务器
+[版瓦工](https://www.bwh1.net)
+[阿里云](https://netcn.aliyun.com/)
+
+### 注册域名
+[阿里云](https://netcn.aliyun.com/)
+
+### 服务器配置工具
+安装[Xshell](http://rj.baidu.com/soft/detail/15201.html?ald)
+### 使用方式
+打开工具--->新建--->填写(名称，主机ip：69.171.77.35，端口号：29007)--->用户认证(用户(root)和密码(自己设置))
+### 开始配置lnmp
+
+1. apt-get update -y 对系统更新 出现Reading package lists... Done 算是成功
+2. apt-get install zsh git curl -y 加载安装工具
+3. cat /etc/issue 查看系统版本,这里使用Ubuntu 16.04
+4. sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 安装zsh
+5. wget -c http://soft.vpser.net/lnmp/lnmp1.4.tar.gz && tar zxf lnmp1.4.tar.gz && cd lnmp1.4 && ./install.sh lnmp 安装lnmp,
+6. 选择数据库版本默认就可以
+7. 输入数据库密码---saigsf
+8. 选择MySQL数据库引擎 ----输入y或直接回车，默认选择innoDB引擎
+9. PHP引擎选择，默认5.5.38
+10. 选择默认直接回车
+11. 按任意键开始安装，Ctrl+c取消安装.
+12. LNMP脚本就会自动安装编译Nginx、MySQL、PHP、phpMyAdmin、Zend Optimizer这几个软件。
+13. 安装完成后，在浏览器中通过IP(http://69.171.77.35/)可以看到一个页面
+
+### 安装node 
+采用nvm安装node：https://github.com/creationix/nvm
+
+#### 安装nvm脚本
+试用以下两种方式：
+```
+To install or update nvm, you can use the install script using cURL:
+
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+or Wget:
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+```
+#### 配置nvm环境变量
+```
+export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+```
+
+```
+command -v nvm
+```
+
+#### 安装node
+
+To download, compile, and install the latest release of node, do this:
+```
+nvm install node
+```
+And then in any new shell just use the installed version:
+```
+nvm use node
+```
+Or you can just run it:
+```
+nvm run node --version
+```
+Or, you can run any arbitrary command in a subshell with the desired version of node:
+```
+nvm exec 4.2 node --version
+```
+You can also get the path to the executable to where it was installed:
+```
+nvm which 5.0
+```
+#### 安装完成后,检测
+```
+node -v
+```
+### 安装[mongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+1. 导入公钥
+```
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+```
+2. Create a list file for MongoDB
+```
+echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+```
+3. Reload local package database
+```
+sudo apt-get update
+```
+4. Install the MongoDB packages
+```
+sudo apt-get install -y mongodb-org
+```
+### Run MongoDB Community Edition
+
+1. Start MongoDB
+```
+sudo service mongod start
+or
+mongod --dbpath data/ --logpath log/mongodb.log -logappend --fork
+```
+2. Verify that MongoDB has started successfully
+```
+[initandlisten] waiting for connections on port <port>
+```
+>where <port> is the port configured in /etc/mongod.conf, 27017 by default.
+3. Stop MongoDB
+```
+sudo service mongod stop
+```
+4. Restart MongoDB
+```
+sudo service mongod restart
+```
+5. Begin using MongoDB
+### Uninstall MongoDB Community Edition
+1. Stop MongoDB
+```
+sudo service mongod stop
+```
+2. Remove Packages
+```
+sudo apt-get purge mongodb-org*
+```
+3. Remove Data Directories.
+```
+sudo rm -r /var/log/mongodb
+sudo rm -r /var/lib/mongodb
+```
+
+
+### 配置mongod.conf文件
+```
+vim /etc/mongod.conf
+```
+#### vim 命令操作
+1. i 插入，下方出现insert 就可以编辑上面的信息
+2. esc 退出编辑
+3. :指令 对文件操作

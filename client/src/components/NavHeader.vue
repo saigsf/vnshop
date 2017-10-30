@@ -344,7 +344,8 @@
 <script>
 import '../../static/css/base.css'
 import Modal from '../components/Modal'
-import { delCookie, getCookie } from '@/util/util'
+import { delCookie, getCookie, encode } from '@/util/util'
+
 export default {
     name: 'HelloWorld',
     props: ['isNowLogin'],
@@ -371,7 +372,7 @@ export default {
         login(){
             this.$https.post('/users/login',{
                 userName:this.userName,
-                userPwd:this.userPwd
+                userPwd:encode(this.userPwd)
             }).then(res=>{
                 console.log(res)
                 this.isLogin=false;

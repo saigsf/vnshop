@@ -81,7 +81,7 @@
                             <li class="section-options clearfix">
                                 <label class="section-header"><em>*</em>收货人姓名</label>
                                 <div class="section-body">
-                                    <input  v-model="address.userName" @keydown="add" type="text" class="input-text" id="consignee_0"  />
+                                    <input  v-model="address.userName" type="text" class="input-text" id="consignee_0"  />
                                 </div>
                             </li>
                             <li class="section-options clearfix">

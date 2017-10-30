@@ -75,14 +75,16 @@
                 <div class="addr-opration addr-default" v-else >Default address</div>
             </li>
             <li class="addr-new">
+              <router-link to="/addAddr">
               <div class="add-new-inner"  >
-                  <router-link to="/addAddr">
+                  
                 <i class="icon-add">
                   <svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg>
                 </i>
                 <p>Add new address</p>
-                </router-link>
+                
               </div>
+              </router-link>
             </li>
           </ul>
         </div>

@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import { delCookie, getCookie } from '@/util/util'
 // 导入视图
 // import HelloWorld from '@/components/HelloWorld'
+import NavMy from '@/components/NavMy'
+
 import GoodsList from '@/views/GoodsList'
 import Home from '@/views/Home'
 import ShopList from '@/views/ShopList'
@@ -80,7 +82,13 @@ const routes = [{
     name: 'OrderSuccess',
     component: OrderSuccess
 
+}, {
+    path: '/test',
+    name: 'test',
+    component: NavMy
+
 }]
+
 const router = new Router({
     routes
 })
