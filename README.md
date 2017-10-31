@@ -735,6 +735,13 @@ root 项目文件所在目录dist
 2. 安装依赖
 3. 启动测试
 4. 使用pm2启动服务
+```
+npm i pm2 -g
+```
+启动
+```
+pm2 start ./bin/www
+```
 5. 配置跨域,在项目文件中配置好生产环境和开发环境的访问IP
     在 src/config/api.config.js
 ```
@@ -745,12 +752,12 @@ module.exports = {
 ```
 6. 配置反向代理,nginx配置执行：
 ```
-vim /usr/local/nginx/conf/vhost/vx.itnote.cn.conf
+vim /usr/local/nginx/conf/vhost/vnshop.saigsf.xyz.conf
 ```
 然后添加
 ```
 location /api/ {
-    proxy_pass http://127.0.0.1:3000/; # 当访问v1的时候默认转发到 3000端口
+    proxy_pass http://127.0.0.1:3000/; # 当访问api的时候默认转发到 3000端口
 }
 ```
 
