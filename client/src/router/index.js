@@ -40,8 +40,7 @@ const routes = [{
 }, {
     path: '/orderDone',
     name: 'OrderDone',
-    component: OrderDone,
-    meta: { requireAuth: true }
+    component: OrderDone
 }, {
     path: '/registerLogin',
     name: 'RegistrLogin',
@@ -53,18 +52,15 @@ const routes = [{
 }, {
     path: '/detail',
     name: 'Detail',
-    component: Detail,
-    meta: { requireAuth: true }
+    component: Detail
 }, {
     path: '/address',
     name: 'Address',
-    component: Address,
-    meta: { requireAuth: true }
+    component: Address
 }, {
     path: '/cart',
     name: 'Cart',
-    component: Cart,
-    meta: { requireAuth: true }
+    component: Cart
 }, {
     path: '/addAddr',
     name: 'AddAddr',

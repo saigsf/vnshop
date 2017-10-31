@@ -66,34 +66,7 @@
                                 </div>
                             </li>
 
-                            <!-- <li class="section-options clearfix section-goods">
-                                <div class="section-header clearfix">
-                                    <h3 class="title">商品列表</h3>
-                                    <router-link to="/cart" class="modify">返回购物车<i class="iconfont"></i></router-link>
-                                </div>
-                                <table width="100%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" class="goods-list-table">
-                                    <tr bgcolor="#cccccc">
-                                        <th  align="center" style="text-align:center" >商品信息</th>
-                                        <th align="center" style="text-align:center">单价*数量</th>
-                                        <th align="center" style="text-align:center">价格小计</th>
-                                    </tr>
-                                    <tr  v-for="(item,idx) in goodsList" :key="idx" v-if="item.checked==='1'">
-                                        <td bgcolor="#ffffff">
-                                            <img :src="'/static/img/'+item.productImage" :title="item.productName" width="30" height="30" />
-                                            <a  target="_blank" class="f6">{{item.productName}} </a>
-                                        </td>
-                                        <td bgcolor="#ffffff" align="center">{{item.salePrice}}<em>元</em>&nbsp;x&nbsp;{{item.productNum}}</td>
-                                        <td bgcolor="#ffffff" align="center"><span style="color:#ff6700;">{{item.salePrice*item.productNum}}.00<em>元</em></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#ffffff" colspan="7">
-                                            <span  >您还没有加入商品</span>
-                                            <span>购物金额小计 2547.00<em>元</em>，比市场价 3034.80<em>元</em> 节省了 487.80<em>元</em> (16%)</span>
-                                            
-                                        </td>
-                                    </tr>
-                                </table>
-                            </li> -->
+                            
                             <li class="section-options clearfix section-goods">
                                 <!-- order list -->
                                 <div class="page-title-normal section-header checkout-title">
@@ -142,43 +115,6 @@
                                 </div>
 
                             </li>
-
-
-                            <!-- <li class="section-options clearfix section-goods">
-                                <h3 class="section-header"><span>祝福贺卡</span></h3>
-                                <table width="100%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="cardTable" class="goods-list-table">
-                                    <tr >
-                                        <th bgcolor="#ffffff" width="5%" scope="col">&nbsp;</th>
-                                        <th bgcolor="#ffffff" width="35%" scope="col">名称</th>
-                                        <th bgcolor="#ffffff" width="22%" scope="col" align="center">价格</th>
-                                        <th bgcolor="#ffffff" width="22%" scope="col" align="center">免费额度</th>
-                                        <th bgcolor="#ffffff" scope="col" align="center">图片</th>
-                                    </tr>
-                                    <tr >
-                                        <td bgcolor="#ffffff" valign="top"><input type="radio" name="card" value="0" checked="true" onclick="selectCard(this)" /></td>
-                                        <td bgcolor="#ffffff" valign="top"><strong>不要贺卡</strong></td>
-                                        <td bgcolor="#ffffff" valign="top" align="center">&nbsp;</td>
-                                        <td bgcolor="#ffffff" valign="top" align="center">&nbsp;</td>
-                                        <td bgcolor="#ffffff" valign="top" align="center">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td valign="top" bgcolor="#ffffff"><input type="radio" name="card" value="1" onclick="selectCard(this)" /></td>
-                                        <td valign="top" bgcolor="#ffffff"><strong>祝福贺卡</strong></td>
-                                        <td valign="top" align="center" bgcolor="#ffffff">5.00<em>元</em></td>
-                                        <td valign="top" align="center" bgcolor="#ffffff">1000.00<em>元</em></td>
-                                        <td valign="top" align="center" bgcolor="#ffffff">
-                                            <a href="/static/data/cardimg/1242108754847457261.jpg" target="_blank" class="f6">查看</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#ffffff"></td>
-                                        <td bgcolor="#ffffff" valign="top" colspan="4">
-                                            <strong>祝福语:</strong>
-                                            <textarea class="card_message" name="card_message" cols="80" rows="4" style="width:auto; border:1px solid #ccc;"></textarea>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </li> -->
 
                             <li class="section-options clearfix">
                                 <h3 class="section-header">其它信息</h3>
