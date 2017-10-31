@@ -1,7 +1,7 @@
 <template>
 <div>
     <nav-header ref="child"></nav-header>
-    <nav-crumbs>orderInfo</nav-crumbs>
+    <nav-crumbs>orderlist</nav-crumbs>
     <div class="page-main">
         <div class="container clearfix">
             
@@ -9,8 +9,8 @@
                 <div class="page-title-normal">
                     <h2 class="page-title-h2"><span>check out</span></h2>
                 </div>
-            <!-- 进度条 -->
-                <div class="check-step " >
+                <!-- 进度条 -->
+                <div class="check-step">
                     <ul>
                         <li class="cur"><span>Confirm</span> address</li>
                         <li class="cur"><span>View your</span> order</li>

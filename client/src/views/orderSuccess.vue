@@ -1,18 +1,19 @@
 <template>
     <div>
         <nav-header></nav-header>
+        <nav-crumbs>orderSuccess</nav-crumbs>
         <div class="container">
             <div class="page-title-normal">
             <h2 class="page-title-h2"><span>check out</span></h2>
             </div>
             <!-- 进度条 -->
             <div class="check-step">
-            <ul>
-                <li class="cur"><span>Confirm</span> address</li>
-                <li class="cur"><span>View your</span> order</li>
-                <li class="cur"><span>Make</span> payment</li>
-                <li class="cur"><span>Order</span> confirmation</li>
-            </ul>
+                <ul>
+                    <li class="cur"><span>Confirm</span> address</li>
+                    <li class="cur"><span>View your</span> order</li>
+                    <li class="cur"><span>Make</span> payment</li>
+                    <li class="cur"><span>Order</span> confirmation</li>
+                </ul>
             </div>
 
             <div class="order-create">
@@ -45,11 +46,13 @@ import '../../static/css/base.css'
 import '../../static/css/checkout.css'
 import NavHeader from '../components/NavHeader'
 import NavFooter from '../components/NavFooter'
+import NavCrumbs from '../components/NavCrumbs'
 export default {
     name: 'OrderSuccess',
     components: {
         NavHeader,
-        NavFooter
+        NavFooter,
+        NavCrumbs
     },
     created(){
         this.getInfo()

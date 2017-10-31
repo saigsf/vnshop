@@ -47,7 +47,7 @@ const routes = [{
     name: 'RegistrLogin',
     component: RegisterLogin
 }, {
-    path: '/orderList/',
+    path: '/orderList',
     name: 'OrderList',
     component: OrderList,
     meta: { requireAuth: true }

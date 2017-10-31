@@ -759,6 +759,7 @@ lnmp vhost add
 vim /usr/local/nginx/conf/vhost/saigsf.com.conf
 vim /usr/local/nginx/conf/vhost/saigsf.xyz.conf
 vim /usr/local/nginx/conf/vhost/vnshop.saigsf.xyz.conf
+vim /usr/local/nginx/conf/vhost/vnshop.saigsf.com.conf
 ```
 1. server_name 域名1 域名2 域名3 ···
 2. 首访问文件 index index.html ···
