@@ -3,16 +3,16 @@ import Router from 'vue-router'
 import { delCookie, getCookie } from '@/util/util'
 // 导入视图
 // import HelloWorld from '@/components/HelloWorld'
-import NavMy from '@/components/NavMy'
+
 
 import GoodsList from '@/views/GoodsList'
 import Home from '@/views/Home'
-import ShopList from '@/views/ShopList'
+
 import Register from '@/views/register'
 import Login from '@/views/login'
 import OrderDone from '@/views/OrderDone'
 import RegisterLogin from '@/views/registerLogin'
-import OrderList from '@/views/orderList'
+import OrderList from '@/views/OrderList'
 import Detail from '@/views/detail'
 import Address from '@/views/address'
 import AddAddr from '@/views/addAddr'
@@ -30,11 +30,6 @@ const routes = [{
     path: '/goodsList',
     name: 'GoodsList',
     component: GoodsList
-}, {
-    path: '/shopList',
-    name: 'ShopList',
-    component: ShopList,
-    meta: { requireAuth: true }
 }, {
     path: '/register',
     name: 'Register',
@@ -81,11 +76,6 @@ const routes = [{
     path: '/orderSuccess',
     name: 'OrderSuccess',
     component: OrderSuccess
-
-}, {
-    path: '/test',
-    name: 'test',
-    component: NavMy
 
 }]
 

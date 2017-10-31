@@ -564,7 +564,8 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | 
 ```
 #### 配置nvm环境变量
 ```
-export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+export NVM_DIR="$HOME/.nvm" 
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 ```
 
 ```
@@ -678,4 +679,100 @@ netstat -anp | grep 27017
 cat /var/log/mongodb/mongod.log
 ```
 
+## 上传项目文件----方法一
+1. 生成dist文件夹,并压缩为zip格式
+```
+npm run build
+```
+> npm run build是vue生成项目文件的语句
+2. 通过xshell上传到服务器
+    自动安装lrzsz工具
+    ```
+    sudo apt-get install lrzsz
+    ```
+    rz，sz是Linux/Unix同Windows进行ZModem文件传输的命令行工具
+    优点：比ftp命令方便，而且服务器不用打开FTP服务。
+    sz：将选定的文件发送（send）到本地机器
+    rz：运行该命令会弹出一个文件选择窗口，从本地选择文件上传到Linux服务器
+3. 执行rz语句，选择压缩文件，开始上传
+```
+rz
+```
+> 在哪里执行就会上传到哪里，选择/home/wwwroot
+4. 解压
+```
+unzip dist.zip
+```
+5. 添加虚拟主机 ，详情见下文，会生成一个文件夹
+6. 将解压后的文件复制到指定目录，cp:复制，-r:深度复制，*:所有文件
+```
+cp -r dist/* 目标文件夹
+```
+## 方法二----从github上拉取项目
+1. 创建虚拟主机····
+2. 拉取github项目文件
+```
+git clone https://github.com/saigsf/vnshop.git 文件夹名
+```
+3. 安装淘宝镜像
+4. 进入vnshop/client,进行初始化
+```
+cnpm i/npm i
+```
+5. 执行build语句
+```
+npm run build
+```
+6. 修改服务器配置文件
+```
+root 项目文件所在目录dist
+```
+7. 重启服务器···OK
+
+
+## nodejs上线
+
+
+
+
+
+
+
+
+##　在一台服务器上配置多个网站
+### 使用Nginx虚拟化配置
+#### 操作步骤
+1. 执行lnmp vhost add,输入自己要绑定的域名，在此之前要把域名解析到当前主机。
+```
+lnmp vhost add
+```
+> 回车绑定,如果输入错误就按Ctrl+backspace 删除
+2. 输入自己域名对应的文件目录,如果不更改直接回车,默认在/home/wwwroot/··· 以你的域名文件夹名字创建目录，如果输入了名字，要使用全路径（加/的）。
+3. 是否要添加静态规则 ，根据网站程序配置选择，一般是url 的访问格式
+4. 是否添加日志，最好保存
+5. 是否选择MySQL的表名，不用了谢谢~
+6. end···点击任意键开始创建
+#### 重复以上操作创建多个网站69.171.77.35
+
+#### 虚拟主机配置错了怎么改
+```
+vim /usr/local/nginx/conf/vhost/saigsf.com.conf
+vim /usr/local/nginx/conf/vhost/saigsf.xyz.conf
+vim /usr/local/nginx/conf/vhost/vnshop.saigsf.xyz.conf
+```
+1. server_name 域名1 域名2 域名3 ···
+2. 首访问文件 index index.html ···
+
+#### 修改配置文件都要重启
+```
+service nginx restart
+```
+或
+````
+systemctl status nginx.service #查看状态
+```
+或
+```
+/etc/init.d/nginx restart
+```
 
