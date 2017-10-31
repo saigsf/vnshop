@@ -653,6 +653,7 @@ sudo rm -r /var/lib/mongodb
 
 
 ### 配置mongod.conf文件
+删除绑定的IP，就可以在远程链接。
 ```
 vim /etc/mongod.conf
 ```
@@ -660,3 +661,21 @@ vim /etc/mongod.conf
 1. i 插入，下方出现insert 就可以编辑上面的信息
 2. esc 退出编辑
 3. :指令 对文件操作
+4. :wq 保存并退出
+5. :wq! 强制保存并退出
+6. :q 直接退出
+7. dd 删除一行
+8. 10dd 删除10行
+>2017年10月31日09:49:36
+
+### 操作
+查看端口信息
+```
+netstat -anp | grep 27017 
+```
+查看日志
+```
+cat /var/log/mongodb/mongod.log
+```
+
+
