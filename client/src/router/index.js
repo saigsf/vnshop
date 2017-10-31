@@ -19,7 +19,6 @@ import AddAddr from '@/views/addAddr'
 import Cart from '@/views/cart'
 import OrderSuccess from '@/views/OrderSuccess'
 
-
 Vue.use(Router)
 
 const routes = [{

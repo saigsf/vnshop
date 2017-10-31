@@ -312,7 +312,7 @@ import NavFooter from '../components/NavFooter'
 import NavCrumbs from '../components/NavCrumbs'
 import Modal from '../components/Modal'
 export default {
-    name: 'orderList',
+    name: 'OrderList',
     components: {
         NavHeader,
         NavFooter,
