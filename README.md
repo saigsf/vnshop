@@ -712,7 +712,7 @@ cp -r dist/* 目标文件夹
 1. 创建虚拟主机····
 2. 拉取github项目文件
 ```
-git clone https://github.com/saigsf/vnshop.git 文件夹名
+git clone https://github.com/saigsf/vnshop.git vnshop(文件夹名)
 ```
 3. 安装淘宝镜像
 4. 进入vnshop/client,进行初始化
@@ -731,6 +731,29 @@ root 项目文件所在目录dist
 
 
 ## nodejs上线
+1. 项目拉取
+2. 安装依赖
+3. 启动测试
+4. 使用pm2启动服务
+5. 配置跨域,在项目文件中配置好生产环境和开发环境的访问IP
+    在 src/config/api.config.js
+```
+const isPro = Object.is(process.env.NODE_ENV == 'production');
+module.exports = {
+    baseURl: isPro ? 'http://vnshop.saigsf.com/api/' : 'api/'
+}
+```
+6. 配置反向代理,nginx配置执行：
+```
+vim /usr/local/nginx/conf/vhost/vx.itnote.cn.conf
+```
+然后添加
+```
+location /api/ {
+    proxy_pass http://127.0.0.1:3000/; # 当访问v1的时候默认转发到 3000端口
+}
+```
+
 
 
 

@@ -12,12 +12,12 @@ import Register from '@/views/register'
 import Login from '@/views/login'
 import OrderDone from '@/views/OrderDone'
 import RegisterLogin from '@/views/registerLogin'
-import OrderList from '@/views/OrderList'
+// import OrderList from '@/views/OrderList'
 import Detail from '@/views/detail'
 import Address from '@/views/address'
 import AddAddr from '@/views/addAddr'
 import Cart from '@/views/cart'
-import OrderSuccess from '@/views/OrderSuccess'
+// import OrderSuccess from '@/views/OrderSuccess'
 
 Vue.use(Router)
 
@@ -47,10 +47,9 @@ const routes = [{
     name: 'RegistrLogin',
     component: RegisterLogin
 }, {
-    path: '/orderList',
-    name: 'OrderList',
-    component: OrderList,
-    meta: { requireAuth: true }
+    // path: '/orderList',
+    // name: 'OrderList',
+    // component: OrderList
 }, {
     path: '/detail',
     name: 'Detail',
@@ -72,9 +71,9 @@ const routes = [{
     component: AddAddr
 
 }, {
-    path: '/orderSuccess',
-    name: 'OrderSuccess',
-    component: OrderSuccess
+    // path: '/orderSuccess',
+    // name: 'OrderSuccess',
+    // // component: OrderSuccess
 
 }]
 
