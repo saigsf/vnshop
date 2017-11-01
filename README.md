@@ -518,6 +518,7 @@ db.users.getIndexes(); //查看所有索引
 db.users.dropIndex({"addressId":"1"}); 
 ```
 [然后未解决。。。。。。。](https://stackoverflow.com/questions/36811174/errmsg-e11000-duplicate-key-error-collection-reduxpress-users-index-addres)
+> 最后只能导入数据库
 
 
 ## 接口文档说明
@@ -533,7 +534,7 @@ db.users.dropIndex({"addressId":"1"});
 ### 服务器配置工具
 安装[Xshell](http://rj.baidu.com/soft/detail/15201.html?ald)
 ### 使用方式
-打开工具--->新建--->填写(名称，主机ip：69.171.77.35，端口号：29007)--->用户认证(用户(root)和密码(自己设置))
+打开工具--->新建--->填写(名称，主机ip：······，端口号：29007)--->用户认证(用户(root)和密码(自己设置))
 ### 开始配置lnmp
 
 1. apt-get update -y 对系统更新 出现Reading package lists... Done 算是成功
@@ -542,7 +543,7 @@ db.users.dropIndex({"addressId":"1"});
 4. sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 安装zsh
 5. wget -c http://soft.vpser.net/lnmp/lnmp1.4.tar.gz && tar zxf lnmp1.4.tar.gz && cd lnmp1.4 && ./install.sh lnmp 安装lnmp,
 6. 选择数据库版本默认就可以
-7. 输入数据库密码---saigsf
+7. 输入数据库密码---输入你的密码
 8. 选择MySQL数据库引擎 ----输入y或直接回车，默认选择innoDB引擎
 9. PHP引擎选择，默认5.5.38
 10. 选择默认直接回车
@@ -667,7 +668,7 @@ vim /etc/mongod.conf
 6. :q 直接退出
 7. dd 删除一行
 8. 10dd 删除10行
->2017年10月31日09:49:36
+> 2017年10月31日09:49:36
 
 ### 操作
 查看端口信息
@@ -732,8 +733,17 @@ root 项目文件所在目录dist
 
 ## nodejs上线
 1. 项目拉取
+```
+git clone https://github.com/saigsf/vnshop.git vnshop(文件夹名)
+```
 2. 安装依赖
+```
+npm install
+```
 3. 启动测试
+```
+npm run start
+```
 4. 使用pm2启动服务
 ```
 npm i pm2 -g
@@ -782,14 +792,12 @@ lnmp vhost add
 4. 是否添加日志，最好保存
 5. 是否选择MySQL的表名，不用了谢谢~
 6. end···点击任意键开始创建
-#### 重复以上操作创建多个网站69.171.77.35
+#### 重复以上操作创建多个网站
 
 #### 虚拟主机配置错了怎么改
 ```
-vim /usr/local/nginx/conf/vhost/saigsf.com.conf
-vim /usr/local/nginx/conf/vhost/saigsf.xyz.conf
-vim /usr/local/nginx/conf/vhost/vnshop.saigsf.xyz.conf
-vim /usr/local/nginx/conf/vhost/vnshop.saigsf.com.conf
+vim /usr/local/nginx/conf/vhost/···.conf
+
 ```
 1. server_name 域名1 域名2 域名3 ···
 2. 首访问文件 index index.html ···
@@ -799,7 +807,7 @@ vim /usr/local/nginx/conf/vhost/vnshop.saigsf.com.conf
 service nginx restart
 ```
 或
-````
+```
 systemctl status nginx.service #查看状态
 ```
 或

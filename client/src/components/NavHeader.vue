@@ -389,15 +389,13 @@ export default {
         },
         checkLogin(){
             this.$https.post('/users/checkLogin').then(res=>{
-                if(res.data.code===0){
+                
                     this.topName=res.data.data
                     this.$https.post('/users/getCartList').then(res=>{
                         this.cartNum=res.data.data.length
                     })
-                }
-                // else{
-                //     this.systemError=true
-                // }
+             
+                
             })
         },
         logOut(){
