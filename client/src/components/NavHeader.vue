@@ -394,9 +394,10 @@ export default {
                     this.$https.post('/users/getCartList').then(res=>{
                         this.cartNum=res.data.data.length
                     })
-                }else{
-                    this.systemError=true
                 }
+                // else{
+                    // this.systemError=true
+                // }
             })
         },
         logOut(){
