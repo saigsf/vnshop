@@ -396,8 +396,15 @@ export default {
                     this.$https.post('/users/getCartList').then(res=>{
                         this.cartNum=res.data.data.length
                     })
+<<<<<<< HEAD
              
                 
+=======
+                }
+                // else{
+                    // this.systemError=true
+                // }
+>>>>>>> 35d85792487411efb85f6b99ce18b6718d0ab838
             })
         },
         logOut(){
