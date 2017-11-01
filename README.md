@@ -812,6 +812,6 @@ systemctl status nginx.service #查看状态
 ```
 或
 ```
-/etc/init.d/nginx restart
+/etc/init.d/nginx restart # 一般使用这个
 ```
 

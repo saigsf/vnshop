@@ -30,8 +30,8 @@
                     <div class="accessory-list col-4">
                         <ul>
                             <li v-for="item in goodsList" :key="item.id" >
-                                <div class="pic" @click="toDetail(item)">
-                                    <a href="#"><img v-lazy="'static/img/'+item.productImage" alt=""></a>
+                                <div class="pic" >
+                                    <a href="#" @click="toDetail(item)" ><img v-lazy="'static/img/'+item.productImage" alt=""></a>
                                 </div>
                                 <div class="main">
                                     <div class="name">{{item.productName}}</div>
