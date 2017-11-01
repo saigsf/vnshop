@@ -29,15 +29,9 @@
                 <div class="accessory-list-wrap">
                     <div class="accessory-list col-4">
                         <ul>
-<<<<<<< HEAD
                             <li v-for="item in goodsList" :key="item.id" >
                                 <div class="pic" >
                                     <a href="#" @click="toDetail(item)" ><img v-lazy="'static/img/'+item.productImage" alt=""></a>
-=======
-                            <li v-for="item in goodsList" :key="item.id">
-                                <div class="pic"  @click="toDetail(item)">
-                                    <a href="#"><img v-lazy="'static/img/'+item.productImage" alt=""></a>
->>>>>>> 35d85792487411efb85f6b99ce18b6718d0ab838
                                 </div>
                                 <div class="main">
                                     <div class="name">{{item.productName}}</div>
