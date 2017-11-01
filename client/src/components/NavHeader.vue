@@ -374,12 +374,14 @@ export default {
                 userName:this.userName,
                 userPwd:encode(this.userPwd)
             }).then(res=>{
-                console.log(res)
                 this.isLogin=false;
                 this.topName=res.data.data.userName
-                this.$https.post('/users/getCartList').then(res=>{
-                        this.cartNum=res.data.data.length
-                    })
+                this.getTopNum()
+            })
+        },
+        getTopNum(){
+            this.$https.post('/users/getCartList').then(res=>{
+                this.cartNum=res.data.data.length
             })
         },
         searchCookie(){

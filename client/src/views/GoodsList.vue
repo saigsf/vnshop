@@ -173,6 +173,7 @@
                             productNum:1
                         }).then((res)=>{
                             if(res.data.code===0){
+                                this.$refs.child.getTopNum()
                                 this.isAddConfirm=true
                             }else{
                                 this.$refs.child.isError()

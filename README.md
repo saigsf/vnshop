@@ -543,7 +543,7 @@ db.users.dropIndex({"addressId":"1"});
 4. sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 安装zsh
 5. wget -c http://soft.vpser.net/lnmp/lnmp1.4.tar.gz && tar zxf lnmp1.4.tar.gz && cd lnmp1.4 && ./install.sh lnmp 安装lnmp,
 6. 选择数据库版本默认就可以
-7. 输入数据库密码---输入你的密码
+7. 输入数据库密码---输入你的密码(saigsf)
 8. 选择MySQL数据库引擎 ----输入y或直接回车，默认选择innoDB引擎
 9. PHP引擎选择，默认5.5.38
 10. 选择默认直接回车
@@ -771,7 +771,13 @@ location /api/ {
 }
 ```
 
-
+## git webhook使用
+webhooks允许外部服务时要通知某些事件发生在你的库。当指定事件发生时，我们将向您提供的每个URL发送一个POST请求。了解更多我们[webhooks指南](https://developer.github.com/webhooks/)。
+1. 在github项目仓库，点击setting----点击webhooks---点击add hook,输入密码确定
+2. Payload URL 当我们提交代码后 git webhook会向这个url发送一个post请求
+3. Content type 选择返回类型 （选择json 类型）
+4. Secret 输入密钥 要和程序中的密钥保持一致
+5. Which events would you like to trigger this webhook? 选择要监听的事件
 
 
 
@@ -797,7 +803,6 @@ lnmp vhost add
 #### 虚拟主机配置错了怎么改
 ```
 vim /usr/local/nginx/conf/vhost/···.conf
-
 ```
 1. server_name 域名1 域名2 域名3 ···
 2. 首访问文件 index index.html ···
@@ -815,3 +820,7 @@ systemctl status nginx.service #查看状态
 /etc/init.d/nginx restart # 一般使用这个
 ```
 
+
+
+### 2017年11月1日10:51:27
+nginx apache
